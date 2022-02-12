@@ -1,0 +1,15 @@
+12-Feb-22 23:25:11 - WARNING : connected to ElasticSearch
+12-Feb-22 23:25:11 - WARNING : 1 of 1: unxmysqldb01
+12-Feb-22 23:25:24 - WARNING : cpu dataFrame created for unxmysqldb01
+12-Feb-22 23:25:24 - WARNING : create model and scaler for cpu data for unxmysqldb01
+12-Feb-22 23:25:38 - WARNING : memory dataFrame created for unxmysqldb01
+12-Feb-22 23:25:39 - WARNING : create model and scaler for memory data for unxmysqldb01
+12-Feb-22 23:25:43 - WARNING : load dataFrame created for unxmysqldb01
+12-Feb-22 23:25:44 - WARNING : create model and scaler for load data for unxmysqldb01
+12-Feb-22 23:25:52 - WARNING : socket_summary dataFrame created for unxmysqldb01
+12-Feb-22 23:25:53 - WARNING : create model and scaler for socket_summary data for unxmysqldb01
+12-Feb-22 23:25:56 - WARNING : process_summary dataFrame created for unxmysqldb01
+12-Feb-22 23:25:56 - WARNING : create model and scaler for process_summary data for unxmysqldb01
+12-Feb-22 23:25:57 - WARNING : create model and scaler for ALL data for unxmysqldb01
+12-Feb-22 23:25:57 - WARNING : the creatModelscript end for unxmysqldb01
+
