@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import IsolationForest
 
 # variables
-traindays = "now-30d/d"
+traindays = "now-57d/d"
 hostname = sys.argv[1]
 df_hostname = pd.DataFrame()
 

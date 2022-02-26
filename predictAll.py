@@ -138,7 +138,7 @@ class InsertDB:
     @staticmethod
     def insert_mysql(host, feature, status, score):
         # sql query
-        sql = 'INSERT INTO unixdb.catchme(hostname, feature, status, score) VALUES (%s, %s, %s, %s)'
+        sql = 'INSERT INTO unixdb.catchme_dev(hostname, feature, status, score) VALUES (%s, %s, %s, %s)'
         values = (host, feature, status[0], score[0])
 
         # esenyurt db operations
@@ -165,7 +165,7 @@ class InsertDB:
 
     @staticmethod
     def insert_es(df_name, host, date, connection):
-        indexname = "catchme_" + date
+        indexname = "dev_catchme_" + date
         df_name["hostname"] = host
         df_name["@timestamp"] = pd.to_datetime(df_name.index, format="%Y-%m-%d-%H:%M")
         esdocs = df_name.to_dict(orient='records')

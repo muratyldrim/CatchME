@@ -1,17 +1,17 @@
-12-Feb-22 23:28:16 - WARNING : connected to ElasticSearch
-12-Feb-22 23:28:16 - WARNING : unxmysqldb01
-12-Feb-22 23:28:18 - WARNING : cpu dataFrame created for unxmysqldb01
-12-Feb-22 23:28:20 - WARNING : predict cpu data for unxmysqldb01
-12-Feb-22 23:28:21 - WARNING : memory dataFrame created for unxmysqldb01
-12-Feb-22 23:28:22 - WARNING : predict memory data for unxmysqldb01
-12-Feb-22 23:28:25 - WARNING : load dataFrame created for unxmysqldb01
-12-Feb-22 23:28:26 - WARNING : predict load data for unxmysqldb01
-12-Feb-22 23:28:30 - WARNING : socket_summary dataFrame created for unxmysqldb01
-12-Feb-22 23:28:31 - WARNING : predict socket_summary data for unxmysqldb01
-12-Feb-22 23:28:34 - WARNING : process_summary dataFrame created for unxmysqldb01
-12-Feb-22 23:28:35 - WARNING : predict process_summary data for unxmysqldb01
-12-Feb-22 23:28:37 - WARNING : predict ALL data for unxmysqldb01
-12-Feb-22 23:28:37 - WARNING : created unxmysqldb01_result dataFrame
-12-Feb-22 23:28:37 - WARNING : starting visulation for unxmysqldb01
-12-Feb-22 23:28:46 - WARNING : the predictSingle script end for unxmysqldb01
+23-Feb-22 17:55:15 - WARNING : connected to ElasticSearch
+23-Feb-22 17:55:15 - WARNING : meddbp2
+23-Feb-22 17:55:35 - WARNING : cpu dataFrame created for meddbp2
+23-Feb-22 17:55:38 - WARNING : predict cpu data for meddbp2
+23-Feb-22 17:56:07 - WARNING : memory dataFrame created for meddbp2
+23-Feb-22 17:56:10 - WARNING : predict memory data for meddbp2
+23-Feb-22 17:56:24 - WARNING : load dataFrame created for meddbp2
+23-Feb-22 17:56:27 - WARNING : predict load data for meddbp2
+23-Feb-22 17:56:42 - WARNING : socket_summary dataFrame created for meddbp2
+23-Feb-22 17:56:44 - WARNING : predict socket_summary data for meddbp2
+23-Feb-22 17:57:01 - WARNING : process_summary dataFrame created for meddbp2
+23-Feb-22 17:57:03 - WARNING : predict process_summary data for meddbp2
+23-Feb-22 17:57:07 - WARNING : predict ALL data for meddbp2
+23-Feb-22 17:57:07 - WARNING : created meddbp2_result dataFrame
+23-Feb-22 17:57:07 - WARNING : starting visulation for meddbp2
+23-Feb-22 17:57:26 - WARNING : the predictSingle script end for meddbp2
 
