@@ -13,7 +13,7 @@ from pandasticsearch import Select
 # variables
 #traindays = "now-30d/d"
 traindays = "now-5m/m"
-hostname_list = ["unxmysqldb01"]  # temp
+hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02"]  # temp
 index = "metricbeat-6.8.9-"
 todayDate = datetime.datetime.today().strftime("%Y.%m.%d")
 
@@ -255,13 +255,14 @@ def get_features(host, metricset, features, days):
 
 
 # Main Code()
+logging.warning(f'The predictAll script started.')
 # connect to elasticsearch
 conn = "False"
 while conn == "False":
     es = Elasticsearch([{'host': '10.86.36.130', 'port': '9200'}])
     if es.ping():
         conn = "True"
-        logging.warning("connected to ElasticSearch")
+        logging.warning("connected to ElasticSearch.\n")
     else:
         logging.warning("cannot connect to ElasticSearch trying again...")
         conn = "False"
@@ -291,5 +292,5 @@ for hostname in hostname_list:
     except:
         logging.warning(f'the predictAll script end for {hostname} with ERROR!\n')
         pass
-
+logging.warning(f'The predictAll script finished for ALL hosts.')
 

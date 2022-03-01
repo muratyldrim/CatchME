@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import IsolationForest
 
 # variables
-traindays = "now-57d/d"
+traindays = "now-30d/d"
 hostname = sys.argv[1]
 df_hostname = pd.DataFrame()
 
@@ -168,6 +168,7 @@ class CreateVisual:
 
 
 # Main Code()
+logging.warning(f'the predictSingle script started.')
 # connect to elasticsearch
 conn = "False"
 while conn == "False":

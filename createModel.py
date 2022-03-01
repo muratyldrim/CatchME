@@ -10,7 +10,7 @@ from sklearn.ensemble import IsolationForest
 
 # variables
 traindays = "now-30d/d"
-hostname_list = ["unxmysqldb01"]
+hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02"]
 index = "metricbeat-6.8.9-"
 todayDate = datetime.datetime.today().strftime("%Y.%m.%d")
 
@@ -179,25 +179,31 @@ def get_features(host, metricset, features, days):
 
 
 # Main Code()
+logging.warning(f'The createModel script started.')
 # connect to elasticsearch
 conn = "False"
 while conn == "False":
     es = Elasticsearch([{'host': '10.86.36.130', 'port': '9200'}])
     if es.ping():
         conn = "True"
-        logging.warning("connected to ElasticSearch")
+        logging.warning("connected to ElasticSearch.\n")
     else:
         logging.warning("cannot connect to ElasticSearch trying again...")
         conn = "False"
 
 # hostname_list = create_hostlist(index, todayDate)
 for hostname in hostname_list:
-    df_hostname = pd.DataFrame()
-    orderhost = hostname_list.index(hostname) + 1
-    lenlist = len(hostname_list)
-    logging.warning(f'{orderhost} of {lenlist}: {hostname}')
-    for key in features_dict:
-        get_features(hostname, key, features_dict[key], traindays)
-    create_model(df_hostname, hostname, "ALL")
-    logging.warning(f'create model and scaler for ALL data for {hostname}')
-    logging.warning(f'the creatModelscript end for {hostname}\n')
+    try:
+        df_hostname = pd.DataFrame()
+        orderhost = hostname_list.index(hostname) + 1
+        lenlist = len(hostname_list)
+        logging.warning(f'{orderhost} of {lenlist}: {hostname}')
+        for key in features_dict:
+            get_features(hostname, key, features_dict[key], traindays)
+        create_model(df_hostname, hostname, "ALL")
+        logging.warning(f'create model and scaler for ALL data for {hostname}')
+        logging.warning(f'the creatModelscript end for {hostname}\n')
+    except Exception as error:
+        logging.warning(f'the createModel script end for {hostname} with ERROR:{error}!\n')
+        pass
+logging.warning(f'The createModel script finished for ALL hosts.')
