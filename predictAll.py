@@ -289,8 +289,8 @@ for hostname in hostname_list:
             logging.warning(f'the predictAll script end for {hostname}\n')
         else:
             logging.warning(f'the predictAll script end for {hostname} with ERROR!\n')
-    except:
-        logging.warning(f'the predictAll script end for {hostname} with ERROR!\n')
+    except Exception as error:
+        logging.warning(f'the predictAll script end for {hostname} with ERROR:{error}!\n')
         pass
 logging.warning(f'The predictAll script finished for ALL hosts.')
 
