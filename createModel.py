@@ -16,6 +16,21 @@ hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02"]
 index = "metricbeat-6.8.9-"
 todayDate = datetime.datetime.today().strftime("%Y.%m.%d")
 
+# logging config
+log_dir = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\logs"
+log_format = '%(asctime)s - %(levelname)s : %(message)s'
+log_level = logging.WARNING
+log_date = '%d-%b-%y %H:%M:%S'
+formatter = logging.Formatter(fmt=log_format, datefmt=log_date)
+
+# all hosts logger config
+allHostsFile = r"\ALL_createModel_log.txt"
+allHostsLogger = logging.getLogger("allhosts")
+allHostsHandler = logging.FileHandler(log_dir + allHostsFile, mode='w')
+allHostsHandler.setLevel(log_level)
+allHostsHandler.setFormatter(formatter)
+allHostsLogger.addHandler(allHostsHandler)
+
 # feature list
 cpu = ["@timestamp",
        "system.cpu.user.pct",
@@ -46,6 +61,7 @@ process_summary = ["@timestamp",
                    "system.process.summary.stopped",
                    "system.process.summary.zombie",
                    "system.process.summary.total"]
+
 # create dictionary for loop features by metrics
 features_dict = {'cpu': cpu,
                  'memory': memory,
@@ -86,13 +102,14 @@ def create_hostlist(index_name, today_date):
             }
         }
     }
-
     res = es.search(index=indexname, body=es_query)
+
     hostname_listdict = res["aggregations"]["uniq_hostname"]["buckets"]
     host_list = []
     for i in range(len(hostname_listdict)):
         host_list.append(hostname_listdict[i]["key"])
-    logging.warning(f'created hostnameList with {len(hostname_listdict)} hosts')
+
+    singleHostLogger.warning(f'hostnameList created with {len(hostname_listdict)} hosts')
     return host_list
 
 
@@ -113,8 +130,9 @@ def create_model(df_name, host, feature):
 
         joblib.dump(scaler, scaler_file)
         joblib.dump(iforest_model, model_file)
+        singleHostLogger.warning(f'{feature} model&scaler created for {host}')
     else:
-        logging.warning(f'creation model and scaler for {host} FAILED!')
+        singleHostLogger.warning(f'{feature} model&scaler creation for {host} FAILED!')
 
 
 # create dataFrame for features
@@ -153,18 +171,24 @@ def get_features(host, metricset, features, days):
         }
     }
     res = es.search(index="metricbeat-6.8.9*", body=es_query, size=50000, request_timeout=100)
+
     df_feature = Select.from_dict(res).to_pandas()
-    logging.warning(f'{metricset} dataFrame created for {host}')
+    singleHostLogger.warning(f'{metricset} dataFrame created for {host}')
+
     df_feature["datetime"] = pd.to_datetime(df_feature["@timestamp"]).dt.strftime('%Y-%m-%d-%H:%M')
     df_feature.drop(columns=["@timestamp", "_index", "_type", "_id", "_score"], inplace=True)
     df_feature = df_feature.sort_values("datetime").set_index("datetime")
     df_feature.dropna(inplace=True)
+
     create_model(df_feature, hostname, metricset)  # call function for create model for all features
-    logging.warning(f'create model and scaler for {metricset} data for {host}')
+
     global df_hostname
     df_hostname = pd.merge(df_hostname, df_feature, left_index=True, right_index=True, how='outer')
     df_hostname.dropna(inplace=True)
 
+
+# Main Code()
+allHostsLogger.warning(f'The createModel script is started for {traindays}.')
 
 # connect to elasticsearch
 conn = "False"
@@ -172,41 +196,41 @@ while conn == "False":
     es = Elasticsearch([{'host': '10.86.36.130', 'port': '9200'}])
     if es.ping():
         conn = "True"
+        allHostsLogger.warning("connected to ElasticSearch.\n")
     else:
         conn = "False"
+        allHostsLogger.warning("cannot connect to ElasticSearch trying again...")
 
 # hostname_list = create_hostlist(index, todayDate)
 queue = queue.Queue(maxsize=0)  # 0 means infinite
 for hostname in hostname_list:
     queue.put(hostname)
 
-
 while not queue.empty():
     hostname = queue.get()
-
-    # logging config
-    log_dir = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\logs"
-    log_file = f'\\{hostname}_createModel_log.txt'
-    log_filemode = "w"  # Default değeri "a" dır.)
-    log_format = '%(asctime)s - %(levelname)s : %(message)s'
-    log_level = logging.WARNING
-    log_date = '%d-%b-%y %H:%M:%S'
-    logging.basicConfig(filename= log_dir + log_file,
-                        level=log_level,
-                        format=log_format,
-                        datefmt=log_date,
-                        filemode=log_filemode)
-
     df_hostname = pd.DataFrame()
     orderhost = hostname_list.index(hostname) + 1
     lenlist = len(hostname_list)
-    logging.warning(f'{orderhost} of {lenlist}: {hostname}')
+
+    # single host logger config
+    singleHostFile = f'\\{hostname}_createModel_log.txt'
+    singleHostLogger = logging.getLogger(hostname)
+    singleHostHandler = logging.FileHandler(log_dir + singleHostFile, mode='w')
+    singleHostHandler.setLevel(log_level)
+    singleHostHandler.setFormatter(formatter)
+    singleHostLogger.addHandler(singleHostHandler)
+
+    allHostsLogger.warning(f'{orderhost} of {lenlist}: {hostname}')
+    singleHostLogger.warning(f'{orderhost} of {lenlist}: {hostname}')
     try:
         for key in features_dict:
             get_features(hostname, key, features_dict[key], traindays)
+        singleHostLogger.warning(f'ALL dataFrame created for {hostname}')
         create_model(df_hostname, hostname, "ALL")
-        logging.warning(f'create model and scaler for ALL data for {hostname}')
-        logging.warning(f'the creatModelscript end for {hostname}\n')
+        singleHostLogger.warning(f'the creatModel script end for {hostname}')
+        allHostsLogger.warning(f'the creatModel script end for {hostname}\n')
     except Exception as error:
-        logging.warning(f'the createModel script end for {hostname} with ERROR:{error}!\n')
+        singleHostLogger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
+        allHostsLogger.warning(f'the creatModel script end for {hostname} with ERROR:{error}!\n')
         pass
+allHostsLogger.warning(f'The createModel script finished for ALL hosts.')

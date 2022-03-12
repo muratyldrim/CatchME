@@ -38,7 +38,7 @@ cpu = ["@timestamp",
        "system.cpu.system.pct",
        "system.cpu.iowait.pct",
        "system.cpu.idle.pct",
-       "system.cpu.total.pct"]
+       "s.cloeystem.cpu.total.pct"]
 
 memory = ["@timestamp",
           "system.memory.actual.free",
