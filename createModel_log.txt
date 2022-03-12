@@ -1,42 +1,88 @@
-01-Mar-22 16:52:36 - WARNING : The createModel script started.
-01-Mar-22 16:52:36 - WARNING : connected to ElasticSearch.
+11-Mar-22 21:54:23 - WARNING : The createModel script started.
+11-Mar-22 21:54:23 - WARNING : connected to ElasticSearch.
 
-01-Mar-22 16:52:36 - WARNING : 1 of 3: unxmysqldb01
-01-Mar-22 16:52:39 - WARNING : cpu dataFrame created for unxmysqldb01
-01-Mar-22 16:52:40 - WARNING : create model and scaler for cpu data for unxmysqldb01
-01-Mar-22 16:52:43 - WARNING : memory dataFrame created for unxmysqldb01
-01-Mar-22 16:52:44 - WARNING : create model and scaler for memory data for unxmysqldb01
-01-Mar-22 16:52:45 - WARNING : load dataFrame created for unxmysqldb01
-01-Mar-22 16:52:46 - WARNING : create model and scaler for load data for unxmysqldb01
-01-Mar-22 16:52:48 - WARNING : socket_summary dataFrame created for unxmysqldb01
-01-Mar-22 16:52:49 - WARNING : create model and scaler for socket_summary data for unxmysqldb01
-01-Mar-22 16:52:50 - WARNING : process_summary dataFrame created for unxmysqldb01
-01-Mar-22 16:52:51 - WARNING : create model and scaler for process_summary data for unxmysqldb01
-01-Mar-22 16:52:52 - WARNING : create model and scaler for ALL data for unxmysqldb01
-01-Mar-22 16:52:52 - WARNING : the creatModelscript end for unxmysqldb01
+11-Mar-22 21:54:23 - WARNING : 1 of 3: unxmysqldb01
+11-Mar-22 21:55:57 - WARNING : cpu dataFrame created for unxmysqldb01
+11-Mar-22 21:55:57 - WARNING : create model and scaler for cpu data for unxmysqldb01
+11-Mar-22 21:57:37 - WARNING : POST http://10.86.36.130:9200/metricbeat-6.8.9*/_search?size=50000 [status:N/A request:100.002s]
+Traceback (most recent call last):
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "C:\Program Files\Python\lib\http\client.py", line 1344, in getresponse
+    response.begin()
+  File "C:\Program Files\Python\lib\http\client.py", line 306, in begin
+    version, status, reason = self._read_status()
+  File "C:\Program Files\Python\lib\http\client.py", line 267, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Program Files\Python\lib\socket.py", line 589, in readinto
+    return self._sock.recv_into(b)
+socket.timeout: timed out
 
-01-Mar-22 16:52:52 - WARNING : 2 of 3: ynmdcachep8
-01-Mar-22 16:53:08 - WARNING : cpu dataFrame created for ynmdcachep8
-01-Mar-22 16:53:10 - WARNING : create model and scaler for cpu data for ynmdcachep8
-01-Mar-22 16:53:15 - WARNING : memory dataFrame created for ynmdcachep8
-01-Mar-22 16:53:17 - WARNING : create model and scaler for memory data for ynmdcachep8
-01-Mar-22 16:53:19 - WARNING : load dataFrame created for ynmdcachep8
-01-Mar-22 16:53:21 - WARNING : create model and scaler for load data for ynmdcachep8
-01-Mar-22 16:53:21 - WARNING : socket_summary dataFrame created for ynmdcachep8
-01-Mar-22 16:53:21 - WARNING : the createModel script end for ynmdcachep8 with ERROR:'NoneType' object is not subscriptable!
+During handling of the above exception, another exception occurred:
 
-01-Mar-22 16:53:21 - WARNING : 3 of 3: vnnxtdp02
-01-Mar-22 16:53:23 - WARNING : cpu dataFrame created for vnnxtdp02
-01-Mar-22 16:53:24 - WARNING : create model and scaler for cpu data for vnnxtdp02
-01-Mar-22 16:53:26 - WARNING : memory dataFrame created for vnnxtdp02
-01-Mar-22 16:53:26 - WARNING : create model and scaler for memory data for vnnxtdp02
-01-Mar-22 16:53:27 - WARNING : load dataFrame created for vnnxtdp02
-01-Mar-22 16:53:28 - WARNING : create model and scaler for load data for vnnxtdp02
-01-Mar-22 16:53:30 - WARNING : socket_summary dataFrame created for vnnxtdp02
-01-Mar-22 16:53:31 - WARNING : create model and scaler for socket_summary data for vnnxtdp02
-01-Mar-22 16:53:32 - WARNING : process_summary dataFrame created for vnnxtdp02
-01-Mar-22 16:53:33 - WARNING : create model and scaler for process_summary data for vnnxtdp02
-01-Mar-22 16:53:34 - WARNING : create model and scaler for ALL data for vnnxtdp02
-01-Mar-22 16:53:34 - WARNING : the creatModelscript end for vnnxtdp02
+Traceback (most recent call last):
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\elasticsearch\connection\http_urllib3.py", line 256, in perform_request
+    method, url, body, retries=Retry(False), headers=request_headers, **kw
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 786, in urlopen
+    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\util\retry.py", line 525, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\packages\six.py", line 770, in reraise
+    raise value
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 710, in urlopen
+    chunked=chunked,
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 341, in _raise_timeout
+    self, url, "Read timed out. (read timeout=%s)" % timeout_value
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100)
+11-Mar-22 21:57:37 - WARNING : the createModel script end for unxmysqldb01 with ERROR:ConnectionTimeout caused by - ReadTimeoutError(HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100))!
 
-01-Mar-22 16:53:34 - WARNING : The createModel script finished for ALL hosts.
+11-Mar-22 21:57:37 - WARNING : 2 of 3: ynmdcachep8
+11-Mar-22 21:58:55 - WARNING : cpu dataFrame created for ynmdcachep8
+11-Mar-22 21:58:55 - WARNING : create model and scaler for cpu data for ynmdcachep8
+11-Mar-22 22:00:35 - WARNING : POST http://10.86.36.130:9200/metricbeat-6.8.9*/_search?size=50000 [status:N/A request:100.002s]
+Traceback (most recent call last):
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "C:\Program Files\Python\lib\http\client.py", line 1344, in getresponse
+    response.begin()
+  File "C:\Program Files\Python\lib\http\client.py", line 306, in begin
+    version, status, reason = self._read_status()
+  File "C:\Program Files\Python\lib\http\client.py", line 267, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Program Files\Python\lib\socket.py", line 589, in readinto
+    return self._sock.recv_into(b)
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\elasticsearch\connection\http_urllib3.py", line 256, in perform_request
+    method, url, body, retries=Retry(False), headers=request_headers, **kw
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 786, in urlopen
+    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\util\retry.py", line 525, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\packages\six.py", line 770, in reraise
+    raise value
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 710, in urlopen
+    chunked=chunked,
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 341, in _raise_timeout
+    self, url, "Read timed out. (read timeout=%s)" % timeout_value
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100)
+11-Mar-22 22:00:35 - WARNING : the createModel script end for ynmdcachep8 with ERROR:ConnectionTimeout caused by - ReadTimeoutError(HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100))!
+
+11-Mar-22 22:00:35 - WARNING : 3 of 3: vnnxtdp02
+11-Mar-22 22:01:42 - WARNING : cpu dataFrame created for vnnxtdp02
+11-Mar-22 22:01:42 - WARNING : create model and scaler for cpu data for vnnxtdp02
+11-Mar-22 22:03:14 - WARNING : memory dataFrame created for vnnxtdp02
+11-Mar-22 22:03:14 - WARNING : create model and scaler for memory data for vnnxtdp02

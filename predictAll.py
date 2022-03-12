@@ -270,11 +270,11 @@ while conn == "False":
 
 # hostname_list = create_hostlist(index, todayDate)
 for hostname in hostname_list:
+    df_hostname = pd.DataFrame()
+    orderhost = hostname_list.index(hostname) + 1
+    lenlist = len(hostname_list)
+    logging.warning(f'{orderhost} of {lenlist}: {hostname}')
     try:
-        df_hostname = pd.DataFrame()
-        orderhost = hostname_list.index(hostname) + 1
-        lenlist = len(hostname_list)
-        logging.warning(f'{orderhost} of {lenlist}: {hostname}')
         for key in features_dict:
             get_features(hostname, key, features_dict[key], traindays)
         df_hostname_result = create_resultdf(df_hostname, features_dict)

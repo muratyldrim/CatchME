@@ -2,6 +2,8 @@ import datetime
 import pandas as pd
 import joblib
 import logging
+import queue
+import threading
 from elasticsearch import Elasticsearch
 from pandasticsearch import Select
 from sklearn.preprocessing import StandardScaler 
@@ -9,24 +11,10 @@ from sklearn.ensemble import IsolationForest
 
 
 # variables
-traindays = "now-30d/d"
+traindays = "now-1d/d"
 hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02"]
 index = "metricbeat-6.8.9-"
 todayDate = datetime.datetime.today().strftime("%Y.%m.%d")
-
-# logging config
-log_dir = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME"
-log_file = r"\createModel_log.txt"
-log_filemode = "w"  # Default değeri "a" dır.)
-log_format = '%(asctime)s - %(levelname)s : %(message)s'
-log_level = logging.WARNING
-log_date = '%d-%b-%y %H:%M:%S'
-logging.basicConfig(filename=log_dir + log_file,
-                    level=log_level,
-                    format=log_format,
-                    datefmt=log_date,
-                    filemode=log_filemode)
-
 
 # feature list
 cpu = ["@timestamp",
@@ -178,26 +166,42 @@ def get_features(host, metricset, features, days):
     df_hostname.dropna(inplace=True)
 
 
-# Main Code()
-logging.warning(f'The createModel script started.')
 # connect to elasticsearch
 conn = "False"
 while conn == "False":
     es = Elasticsearch([{'host': '10.86.36.130', 'port': '9200'}])
     if es.ping():
         conn = "True"
-        logging.warning("connected to ElasticSearch.\n")
     else:
-        logging.warning("cannot connect to ElasticSearch trying again...")
         conn = "False"
 
 # hostname_list = create_hostlist(index, todayDate)
+queue = queue.Queue(maxsize=0)  # 0 means infinite
 for hostname in hostname_list:
+    queue.put(hostname)
+
+
+while not queue.empty():
+    hostname = queue.get()
+
+    # logging config
+    log_dir = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\logs"
+    log_file = f'\\{hostname}_createModel_log.txt'
+    log_filemode = "w"  # Default değeri "a" dır.)
+    log_format = '%(asctime)s - %(levelname)s : %(message)s'
+    log_level = logging.WARNING
+    log_date = '%d-%b-%y %H:%M:%S'
+    logging.basicConfig(filename= log_dir + log_file,
+                        level=log_level,
+                        format=log_format,
+                        datefmt=log_date,
+                        filemode=log_filemode)
+
+    df_hostname = pd.DataFrame()
+    orderhost = hostname_list.index(hostname) + 1
+    lenlist = len(hostname_list)
+    logging.warning(f'{orderhost} of {lenlist}: {hostname}')
     try:
-        df_hostname = pd.DataFrame()
-        orderhost = hostname_list.index(hostname) + 1
-        lenlist = len(hostname_list)
-        logging.warning(f'{orderhost} of {lenlist}: {hostname}')
         for key in features_dict:
             get_features(hostname, key, features_dict[key], traindays)
         create_model(df_hostname, hostname, "ALL")
@@ -206,4 +210,3 @@ for hostname in hostname_list:
     except Exception as error:
         logging.warning(f'the createModel script end for {hostname} with ERROR:{error}!\n')
         pass
-logging.warning(f'The createModel script finished for ALL hosts.')
