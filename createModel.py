@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import logging
 import queue
-import threading
+# import threading
 from elasticsearch import Elasticsearch
 from pandasticsearch import Select
 from sklearn.preprocessing import StandardScaler 
@@ -180,7 +180,7 @@ def get_features(host, metricset, features, days):
     df_feature = df_feature.sort_values("datetime").set_index("datetime")
     df_feature.dropna(inplace=True)
 
-    create_model(df_feature, hostname, metricset)  # call function for create model for all features
+    create_model(df_feature, hostname, metricset)
 
     global df_hostname
     df_hostname = pd.merge(df_hostname, df_feature, left_index=True, right_index=True, how='outer')
@@ -209,6 +209,7 @@ for hostname in hostname_list:
 while not queue.empty():
     hostname = queue.get()
     df_hostname = pd.DataFrame()
+
     orderhost = hostname_list.index(hostname) + 1
     lenlist = len(hostname_list)
 
@@ -222,15 +223,19 @@ while not queue.empty():
 
     allHostsLogger.warning(f'{orderhost} of {lenlist}: {hostname}')
     singleHostLogger.warning(f'{orderhost} of {lenlist}: {hostname}')
+
     try:
         for key in features_dict:
             get_features(hostname, key, features_dict[key], traindays)
         singleHostLogger.warning(f'ALL dataFrame created for {hostname}')
+
         create_model(df_hostname, hostname, "ALL")
+
         singleHostLogger.warning(f'the creatModel script end for {hostname}')
         allHostsLogger.warning(f'the creatModel script end for {hostname}\n')
     except Exception as error:
         singleHostLogger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
         allHostsLogger.warning(f'the creatModel script end for {hostname} with ERROR:{error}!\n')
         pass
+
 allHostsLogger.warning(f'The createModel script finished for ALL hosts.')
