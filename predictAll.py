@@ -11,7 +11,7 @@ from pandasticsearch import Select
 
 
 # variables
-#traindays = "now-30d/d"
+# traindays = "now-30d/d"
 traindays = "now-5m/m"
 hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02"]  # temp
 index = "metricbeat-6.8.9-"
@@ -38,7 +38,7 @@ cpu = ["@timestamp",
        "system.cpu.system.pct",
        "system.cpu.iowait.pct",
        "system.cpu.idle.pct",
-       "s.cloeystem.cpu.total.pct"]
+       "system.cpu.total.pct"]
 
 memory = ["@timestamp",
           "system.memory.actual.free",

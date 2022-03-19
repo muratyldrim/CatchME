@@ -1,17 +1,18 @@
-23-Feb-22 17:55:15 - WARNING : connected to ElasticSearch
-23-Feb-22 17:55:15 - WARNING : meddbp2
-23-Feb-22 17:55:35 - WARNING : cpu dataFrame created for meddbp2
-23-Feb-22 17:55:38 - WARNING : predict cpu data for meddbp2
-23-Feb-22 17:56:07 - WARNING : memory dataFrame created for meddbp2
-23-Feb-22 17:56:10 - WARNING : predict memory data for meddbp2
-23-Feb-22 17:56:24 - WARNING : load dataFrame created for meddbp2
-23-Feb-22 17:56:27 - WARNING : predict load data for meddbp2
-23-Feb-22 17:56:42 - WARNING : socket_summary dataFrame created for meddbp2
-23-Feb-22 17:56:44 - WARNING : predict socket_summary data for meddbp2
-23-Feb-22 17:57:01 - WARNING : process_summary dataFrame created for meddbp2
-23-Feb-22 17:57:03 - WARNING : predict process_summary data for meddbp2
-23-Feb-22 17:57:07 - WARNING : predict ALL data for meddbp2
-23-Feb-22 17:57:07 - WARNING : created meddbp2_result dataFrame
-23-Feb-22 17:57:07 - WARNING : starting visulation for meddbp2
-23-Feb-22 17:57:26 - WARNING : the predictSingle script end for meddbp2
+19-Mar-22 21:35:08 - WARNING : the predictSingle script started.
+19-Mar-22 21:35:08 - WARNING : connected to ElasticSearch
+19-Mar-22 21:35:08 - WARNING : sblapp01
+19-Mar-22 21:35:10 - WARNING : cpu dataFrame created for sblapp01
+19-Mar-22 21:35:11 - WARNING : predict cpu data for sblapp01
+19-Mar-22 21:35:12 - WARNING : memory dataFrame created for sblapp01
+19-Mar-22 21:35:14 - WARNING : predict memory data for sblapp01
+19-Mar-22 21:35:15 - WARNING : load dataFrame created for sblapp01
+19-Mar-22 21:35:16 - WARNING : predict load data for sblapp01
+19-Mar-22 21:35:17 - WARNING : socket_summary dataFrame created for sblapp01
+19-Mar-22 21:35:18 - WARNING : predict socket_summary data for sblapp01
+19-Mar-22 21:35:20 - WARNING : process_summary dataFrame created for sblapp01
+19-Mar-22 21:35:22 - WARNING : predict process_summary data for sblapp01
+19-Mar-22 21:35:24 - WARNING : predict ALL data for sblapp01
+19-Mar-22 21:35:24 - WARNING : created sblapp01_result dataFrame
+19-Mar-22 21:35:24 - WARNING : starting visulation for sblapp01
+19-Mar-22 21:35:33 - WARNING : the predictSingle script end for sblapp01
 

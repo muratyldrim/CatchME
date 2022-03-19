@@ -1,143 +1,91 @@
-11-Mar-22 21:23:46 - WARNING : The predictAll script started.
-11-Mar-22 21:23:46 - WARNING : connected to ElasticSearch.
+19-Mar-22 22:17:11 - WARNING : The predictAll script started.
+19-Mar-22 22:17:11 - WARNING : connected to ElasticSearch.
 
-11-Mar-22 21:23:46 - WARNING : 1 of 3: unxmysqldb01
-11-Mar-22 21:24:53 - WARNING : cpu dataFrame created for unxmysqldb01
-11-Mar-22 21:24:53 - WARNING : found unxmysqldb01_cpu_model.pkl
-11-Mar-22 21:24:53 - WARNING : found unxmysqldb01_cpu_scaler.pkl
-11-Mar-22 21:24:53 - WARNING : predict cpu data for unxmysqldb01
-11-Mar-22 21:24:54 - WARNING : no cpu anomaly detect for unxmysqldb01
-11-Mar-22 21:24:58 - WARNING : memory dataFrame created for unxmysqldb01
-11-Mar-22 21:24:58 - WARNING : found unxmysqldb01_memory_model.pkl
-11-Mar-22 21:24:58 - WARNING : found unxmysqldb01_memory_scaler.pkl
-11-Mar-22 21:24:58 - WARNING : predict memory data for unxmysqldb01
-11-Mar-22 21:24:59 - WARNING : no memory anomaly detect for unxmysqldb01
-11-Mar-22 21:25:01 - WARNING : load dataFrame created for unxmysqldb01
-11-Mar-22 21:25:01 - WARNING : found unxmysqldb01_load_model.pkl
-11-Mar-22 21:25:01 - WARNING : found unxmysqldb01_load_scaler.pkl
-11-Mar-22 21:25:01 - WARNING : predict load data for unxmysqldb01
-11-Mar-22 21:25:01 - WARNING : no load anomaly detect for unxmysqldb01
-11-Mar-22 21:26:41 - WARNING : POST http://10.86.36.130:9200/metricbeat-6.8.9*/_search?size=50000 [status:N/A request:100.004s]
-Traceback (most recent call last):
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
-    six.raise_from(e, None)
-  File "<string>", line 3, in raise_from
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
-    httplib_response = conn.getresponse()
-  File "C:\Program Files\Python\lib\http\client.py", line 1344, in getresponse
-    response.begin()
-  File "C:\Program Files\Python\lib\http\client.py", line 306, in begin
-    version, status, reason = self._read_status()
-  File "C:\Program Files\Python\lib\http\client.py", line 267, in _read_status
-    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
-  File "C:\Program Files\Python\lib\socket.py", line 589, in readinto
-    return self._sock.recv_into(b)
-socket.timeout: timed out
+19-Mar-22 22:17:11 - WARNING : 1 of 3: unxmysqldb01
+19-Mar-22 22:17:11 - WARNING : cpu dataFrame created for unxmysqldb01
+19-Mar-22 22:17:11 - WARNING : found unxmysqldb01_cpu_model.pkl
+19-Mar-22 22:17:11 - WARNING : found unxmysqldb01_cpu_scaler.pkl
+19-Mar-22 22:17:12 - WARNING : predict cpu data for unxmysqldb01
+19-Mar-22 22:17:12 - WARNING : no cpu anomaly detect for unxmysqldb01
+19-Mar-22 22:17:12 - WARNING : memory dataFrame created for unxmysqldb01
+19-Mar-22 22:17:12 - WARNING : found unxmysqldb01_memory_model.pkl
+19-Mar-22 22:17:12 - WARNING : found unxmysqldb01_memory_scaler.pkl
+19-Mar-22 22:17:12 - WARNING : predict memory data for unxmysqldb01
+19-Mar-22 22:17:12 - WARNING : no memory anomaly detect for unxmysqldb01
+19-Mar-22 22:17:12 - WARNING : load dataFrame created for unxmysqldb01
+19-Mar-22 22:17:12 - WARNING : found unxmysqldb01_load_model.pkl
+19-Mar-22 22:17:12 - WARNING : found unxmysqldb01_load_scaler.pkl
+19-Mar-22 22:17:12 - WARNING : predict load data for unxmysqldb01
+19-Mar-22 22:17:12 - WARNING : no load anomaly detect for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : socket_summary dataFrame created for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : found unxmysqldb01_socket_summary_model.pkl
+19-Mar-22 22:17:13 - WARNING : found unxmysqldb01_socket_summary_scaler.pkl
+19-Mar-22 22:17:13 - WARNING : predict socket_summary data for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : no socket_summary anomaly detect for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : process_summary dataFrame created for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : found unxmysqldb01_process_summary_model.pkl
+19-Mar-22 22:17:13 - WARNING : found unxmysqldb01_process_summary_scaler.pkl
+19-Mar-22 22:17:13 - WARNING : predict process_summary data for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : no process_summary anomaly detect for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : found unxmysqldb01_ALL_model.pkl
+19-Mar-22 22:17:13 - WARNING : found unxmysqldb01_ALL_scaler.pkl
+19-Mar-22 22:17:13 - WARNING : predict ALL data for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : no ALL anomaly detect for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : created unxmysqldb01_result dataFrame
+19-Mar-22 22:17:13 - WARNING : inserting to es index: dev_catchme_2022.03.19 for unxmysqldb01
+19-Mar-22 22:17:13 - WARNING : the predictAll script end for unxmysqldb01
 
-During handling of the above exception, another exception occurred:
+19-Mar-22 22:17:13 - WARNING : 2 of 3: ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : cpu dataFrame created for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : found ynmdcachep8_cpu_model.pkl
+19-Mar-22 22:17:13 - WARNING : found ynmdcachep8_cpu_scaler.pkl
+19-Mar-22 22:17:13 - WARNING : predict cpu data for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : no cpu anomaly detect for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : memory dataFrame created for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : found ynmdcachep8_memory_model.pkl
+19-Mar-22 22:17:13 - WARNING : found ynmdcachep8_memory_scaler.pkl
+19-Mar-22 22:17:13 - WARNING : predict memory data for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : no memory anomaly detect for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : load dataFrame created for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : found ynmdcachep8_load_model.pkl
+19-Mar-22 22:17:13 - WARNING : found ynmdcachep8_load_scaler.pkl
+19-Mar-22 22:17:13 - WARNING : predict load data for ynmdcachep8
+19-Mar-22 22:17:13 - WARNING : no load anomaly detect for ynmdcachep8
+19-Mar-22 22:17:14 - WARNING : socket_summary dataFrame created for ynmdcachep8
+19-Mar-22 22:17:14 - WARNING : the predictAll script end for ynmdcachep8 with ERROR:'NoneType' object is not subscriptable!
 
-Traceback (most recent call last):
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\elasticsearch\connection\http_urllib3.py", line 256, in perform_request
-    method, url, body, retries=Retry(False), headers=request_headers, **kw
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 786, in urlopen
-    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\util\retry.py", line 525, in increment
-    raise six.reraise(type(error), error, _stacktrace)
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\packages\six.py", line 770, in reraise
-    raise value
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 710, in urlopen
-    chunked=chunked,
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 451, in _make_request
-    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 341, in _raise_timeout
-    self, url, "Read timed out. (read timeout=%s)" % timeout_value
-urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100)
-11-Mar-22 21:26:41 - WARNING : the predictAll script end for unxmysqldb01 with ERROR:ConnectionTimeout caused by - ReadTimeoutError(HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100))!
+19-Mar-22 22:17:14 - WARNING : 3 of 3: vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : cpu dataFrame created for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_cpu_model.pkl
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_cpu_scaler.pkl
+19-Mar-22 22:17:14 - WARNING : predict cpu data for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : no cpu anomaly detect for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : memory dataFrame created for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_memory_model.pkl
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_memory_scaler.pkl
+19-Mar-22 22:17:14 - WARNING : predict memory data for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : no memory anomaly detect for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : load dataFrame created for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_load_model.pkl
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_load_scaler.pkl
+19-Mar-22 22:17:14 - WARNING : predict load data for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : no load anomaly detect for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : socket_summary dataFrame created for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_socket_summary_model.pkl
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_socket_summary_scaler.pkl
+19-Mar-22 22:17:14 - WARNING : predict socket_summary data for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : no socket_summary anomaly detect for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : process_summary dataFrame created for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_process_summary_model.pkl
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_process_summary_scaler.pkl
+19-Mar-22 22:17:14 - WARNING : predict process_summary data for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : no process_summary anomaly detect for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_ALL_model.pkl
+19-Mar-22 22:17:14 - WARNING : found vnnxtdp02_ALL_scaler.pkl
+19-Mar-22 22:17:14 - WARNING : predict ALL data for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : no ALL anomaly detect for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : created vnnxtdp02_result dataFrame
+19-Mar-22 22:17:14 - WARNING : inserting to es index: dev_catchme_2022.03.19 for vnnxtdp02
+19-Mar-22 22:17:14 - WARNING : the predictAll script end for vnnxtdp02
 
-11-Mar-22 21:26:41 - WARNING : 2 of 3: ynmdcachep8
-11-Mar-22 21:28:21 - WARNING : POST http://10.86.36.130:9200/metricbeat-6.8.9*/_search?size=50000 [status:N/A request:100.006s]
-Traceback (most recent call last):
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
-    six.raise_from(e, None)
-  File "<string>", line 3, in raise_from
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
-    httplib_response = conn.getresponse()
-  File "C:\Program Files\Python\lib\http\client.py", line 1344, in getresponse
-    response.begin()
-  File "C:\Program Files\Python\lib\http\client.py", line 306, in begin
-    version, status, reason = self._read_status()
-  File "C:\Program Files\Python\lib\http\client.py", line 267, in _read_status
-    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
-  File "C:\Program Files\Python\lib\socket.py", line 589, in readinto
-    return self._sock.recv_into(b)
-socket.timeout: timed out
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\elasticsearch\connection\http_urllib3.py", line 256, in perform_request
-    method, url, body, retries=Retry(False), headers=request_headers, **kw
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 786, in urlopen
-    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\util\retry.py", line 525, in increment
-    raise six.reraise(type(error), error, _stacktrace)
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\packages\six.py", line 770, in reraise
-    raise value
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 710, in urlopen
-    chunked=chunked,
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 451, in _make_request
-    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 341, in _raise_timeout
-    self, url, "Read timed out. (read timeout=%s)" % timeout_value
-urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100)
-11-Mar-22 21:28:21 - WARNING : the predictAll script end for ynmdcachep8 with ERROR:ConnectionTimeout caused by - ReadTimeoutError(HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100))!
-
-11-Mar-22 21:28:21 - WARNING : 3 of 3: vnnxtdp02
-11-Mar-22 21:29:49 - WARNING : cpu dataFrame created for vnnxtdp02
-11-Mar-22 21:29:49 - WARNING : found vnnxtdp02_cpu_model.pkl
-11-Mar-22 21:29:49 - WARNING : found vnnxtdp02_cpu_scaler.pkl
-11-Mar-22 21:29:49 - WARNING : predict cpu data for vnnxtdp02
-11-Mar-22 21:29:49 - WARNING : no cpu anomaly detect for vnnxtdp02
-11-Mar-22 21:30:13 - WARNING : memory dataFrame created for vnnxtdp02
-11-Mar-22 21:30:13 - WARNING : found vnnxtdp02_memory_model.pkl
-11-Mar-22 21:30:13 - WARNING : found vnnxtdp02_memory_scaler.pkl
-11-Mar-22 21:30:13 - WARNING : predict memory data for vnnxtdp02
-11-Mar-22 21:30:13 - WARNING : no memory anomaly detect for vnnxtdp02
-11-Mar-22 21:31:53 - WARNING : POST http://10.86.36.130:9200/metricbeat-6.8.9*/_search?size=50000 [status:N/A request:100.003s]
-Traceback (most recent call last):
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
-    six.raise_from(e, None)
-  File "<string>", line 3, in raise_from
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
-    httplib_response = conn.getresponse()
-  File "C:\Program Files\Python\lib\http\client.py", line 1344, in getresponse
-    response.begin()
-  File "C:\Program Files\Python\lib\http\client.py", line 306, in begin
-    version, status, reason = self._read_status()
-  File "C:\Program Files\Python\lib\http\client.py", line 267, in _read_status
-    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
-  File "C:\Program Files\Python\lib\socket.py", line 589, in readinto
-    return self._sock.recv_into(b)
-socket.timeout: timed out
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\elasticsearch\connection\http_urllib3.py", line 256, in perform_request
-    method, url, body, retries=Retry(False), headers=request_headers, **kw
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 786, in urlopen
-    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\util\retry.py", line 525, in increment
-    raise six.reraise(type(error), error, _stacktrace)
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\packages\six.py", line 770, in reraise
-    raise value
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 710, in urlopen
-    chunked=chunked,
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 451, in _make_request
-    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
-  File "C:\Users\murat.yildirim2\PycharmProjects\CatchME\venv\lib\site-packages\urllib3\connectionpool.py", line 341, in _raise_timeout
-    self, url, "Read timed out. (read timeout=%s)" % timeout_value
-urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100)
-11-Mar-22 21:31:53 - WARNING : the predictAll script end for vnnxtdp02 with ERROR:ConnectionTimeout caused by - ReadTimeoutError(HTTPConnectionPool(host='10.86.36.130', port='9200'): Read timed out. (read timeout=100))!
-
-11-Mar-22 21:31:53 - WARNING : The predictAll script finished for ALL hosts.
+19-Mar-22 22:17:14 - WARNING : The predictAll script finished for ALL hosts.

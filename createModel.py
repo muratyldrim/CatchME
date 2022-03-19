@@ -196,7 +196,7 @@ while conn == "False":
     es = Elasticsearch([{'host': '10.86.36.130', 'port': '9200'}])
     if es.ping():
         conn = "True"
-        allHostsLogger.warning("connected to ElasticSearch.\n")
+        allHostsLogger.warning("connected to ElasticSea rch.\n")
     else:
         conn = "False"
         allHostsLogger.warning("cannot connect to ElasticSearch trying again...")
@@ -227,6 +227,7 @@ while not queue.empty():
     try:
         for key in features_dict:
             get_features(hostname, key, features_dict[key], traindays)
+
         singleHostLogger.warning(f'ALL dataFrame created for {hostname}')
 
         create_model(df_hostname, hostname, "ALL")
