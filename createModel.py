@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import logging
 import queue
-# import threading
+import threading
 from elasticsearch import Elasticsearch
 from pandasticsearch import Select
 from sklearn.preprocessing import StandardScaler 
@@ -11,8 +11,8 @@ from sklearn.ensemble import IsolationForest
 
 
 # variables
-traindays = "now-1d/d"
-hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02"]
+traindays = "now-30d/d"
+hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05"]
 index = "metricbeat-6.8.9-"
 todayDate = datetime.datetime.today().strftime("%Y.%m.%d")
 
@@ -24,12 +24,12 @@ log_date = '%d-%b-%y %H:%M:%S'
 formatter = logging.Formatter(fmt=log_format, datefmt=log_date)
 
 # all hosts logger config
-allHostsFile = r"\ALL_createModel_log.txt"
-allHostsLogger = logging.getLogger("allhosts")
-allHostsHandler = logging.FileHandler(log_dir + allHostsFile, mode='w')
-allHostsHandler.setLevel(log_level)
-allHostsHandler.setFormatter(formatter)
-allHostsLogger.addHandler(allHostsHandler)
+allhosts_file = r"\ALLHosts_createModel_log.txt"
+allhosts_logger = logging.getLogger("allhosts")
+allhosts_handler = logging.FileHandler(log_dir + allhosts_file, mode='w')
+allhosts_handler.setLevel(log_level)
+allhosts_handler.setFormatter(formatter)
+allhosts_logger.addHandler(allhosts_handler)
 
 # feature list
 cpu = ["@timestamp",
@@ -109,12 +109,12 @@ def create_hostlist(index_name, today_date):
     for i in range(len(hostname_listdict)):
         host_list.append(hostname_listdict[i]["key"])
 
-    singleHostLogger.warning(f'hostnameList created with {len(hostname_listdict)} hosts')
+    allhosts_logger.warning(f'hostnameList created with {len(hostname_listdict)} hosts')
     return host_list
 
 
 # create model for all features
-def create_model(df_name, host, feature):
+def create_model(df_name, host, feature, logger):
     model_path = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\models\/"
     scaler_path = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\scalers\/"
 
@@ -130,13 +130,13 @@ def create_model(df_name, host, feature):
 
         joblib.dump(scaler, scaler_file)
         joblib.dump(iforest_model, model_file)
-        singleHostLogger.warning(f'{feature} model&scaler created for {host}')
+        logger.warning(f'{feature} model&scaler created for {host}')
     else:
-        singleHostLogger.warning(f'{feature} model&scaler creation for {host} FAILED!')
+        logger.warning(f'{feature} model&scaler creation for {host} FAILED!')
 
 
 # create dataFrame for features
-def get_features(host, metricset, features, days):
+def get_features(host, metricset, features, days, df_featureall, logger):
     es_query = {
         "_source": {
             "includes": features
@@ -173,22 +173,57 @@ def get_features(host, metricset, features, days):
     res = es.search(index="metricbeat-6.8.9*", body=es_query, size=50000, request_timeout=100)
 
     df_feature = Select.from_dict(res).to_pandas()
-    singleHostLogger.warning(f'{metricset} dataFrame created for {host}')
+    logger.warning(f'{metricset} dataFrame created for {host}')
 
     df_feature["datetime"] = pd.to_datetime(df_feature["@timestamp"]).dt.strftime('%Y-%m-%d-%H:%M')
     df_feature.drop(columns=["@timestamp", "_index", "_type", "_id", "_score"], inplace=True)
     df_feature = df_feature.sort_values("datetime").set_index("datetime")
     df_feature.dropna(inplace=True)
 
-    create_model(df_feature, hostname, metricset)
+    create_model(df_feature, host, metricset, logger)
 
-    global df_hostname
-    df_hostname = pd.merge(df_hostname, df_feature, left_index=True, right_index=True, how='outer')
-    df_hostname.dropna(inplace=True)
+    df_featureall = pd.merge(df_featureall, df_feature, left_index=True, right_index=True, how='outer')
+    df_featureall.dropna(inplace=True)
+    return df_featureall
+
+
+def main(_queue, _thread):
+    while not _queue.empty():
+        hostname = _queue.get()
+        df_hostname = pd.DataFrame()
+        orderhost = hostname_list.index(hostname) + 1
+        lenlist = len(hostname_list)
+
+        # single host logger config
+        singlehost_file = f'\\{hostname}_createModel_log.txt'
+        singlehost_logger = logging.getLogger(hostname)
+        singlehost_handler = logging.FileHandler(log_dir + singlehost_file, mode='w')
+        singlehost_handler.setLevel(log_level)
+        singlehost_handler.setFormatter(formatter)
+        singlehost_logger.addHandler(singlehost_handler)
+
+        singlehost_logger.warning(f'{orderhost} of {lenlist}: {hostname}')
+        singlehost_logger.warning(f'Runnig Thread-{_thread}')
+
+        try:
+            for key in features_dict:
+                df_hostname = get_features(hostname, key, features_dict[key], traindays, df_hostname, singlehost_logger)
+
+            singlehost_logger.warning(f'ALL dataFrame created for {hostname}')
+
+            create_model(df_hostname, hostname, "ALL", singlehost_logger)
+
+            singlehost_logger.warning(f'the creatModel script end for {hostname}')
+            allhosts_logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+        except Exception as error:
+            singlehost_logger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
+            allhosts_logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} '
+                                    f'end with ERROR:{error}!')
+            return True
 
 
 # Main Code()
-allHostsLogger.warning(f'The createModel script is started for {traindays}.')
+allhosts_logger.warning(f'The createModel script is started for {traindays}.')
 
 # connect to elasticsearch
 conn = "False"
@@ -196,47 +231,25 @@ while conn == "False":
     es = Elasticsearch([{'host': '10.86.36.130', 'port': '9200'}])
     if es.ping():
         conn = "True"
-        allHostsLogger.warning("connected to ElasticSea rch.\n")
+        allhosts_logger.warning("connected to ElasticSearch.")
     else:
         conn = "False"
-        allHostsLogger.warning("cannot connect to ElasticSearch trying again...")
+        allhosts_logger.warning("cannot connect to ElasticSearch trying again...")
 
 # hostname_list = create_hostlist(index, todayDate)
 queue = queue.Queue(maxsize=0)  # 0 means infinite
-for hostname in hostname_list:
-    queue.put(hostname)
+for j in hostname_list:
+    queue.put(j)
 
-while not queue.empty():
-    hostname = queue.get()
-    df_hostname = pd.DataFrame()
+num_threads = 3
+threads = []
+for thread in range(num_threads):
+    worker = threading.Thread(target=main, args=(queue, thread,), daemon=True)
+    worker.start()
+    threads.append(worker)
 
-    orderhost = hostname_list.index(hostname) + 1
-    lenlist = len(hostname_list)
+for worker in threads:
+    worker.join()
 
-    # single host logger config
-    singleHostFile = f'\\{hostname}_createModel_log.txt'
-    singleHostLogger = logging.getLogger(hostname)
-    singleHostHandler = logging.FileHandler(log_dir + singleHostFile, mode='w')
-    singleHostHandler.setLevel(log_level)
-    singleHostHandler.setFormatter(formatter)
-    singleHostLogger.addHandler(singleHostHandler)
-
-    allHostsLogger.warning(f'{orderhost} of {lenlist}: {hostname}')
-    singleHostLogger.warning(f'{orderhost} of {lenlist}: {hostname}')
-
-    try:
-        for key in features_dict:
-            get_features(hostname, key, features_dict[key], traindays)
-
-        singleHostLogger.warning(f'ALL dataFrame created for {hostname}')
-
-        create_model(df_hostname, hostname, "ALL")
-
-        singleHostLogger.warning(f'the creatModel script end for {hostname}')
-        allHostsLogger.warning(f'the creatModel script end for {hostname}\n')
-    except Exception as error:
-        singleHostLogger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
-        allHostsLogger.warning(f'the creatModel script end for {hostname} with ERROR:{error}!\n')
-        pass
-
-allHostsLogger.warning(f'The createModel script finished for ALL hosts.')
+if threading.activeCount() == 1:
+    allhosts_logger.warning("The createModel script finished for ALL hosts.")
