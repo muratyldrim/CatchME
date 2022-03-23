@@ -3,6 +3,5 @@
 /models/
 /venv/
 /.idea/
-/*log.txt
-
-
+/predictAll_log.txt
+/predictSingle_log.txt
