@@ -1,67 +1,42 @@
+import threading
 from module import *
+from queue import Queue
 
 
-'''Call function for allhosts logger config'''
-allhosts_logger = create_logger("AllHosts")
+# Main Function
+def main():
+    # Script variables
+    processdays = "now-30d/d"
+    # hostname_list = create_hostlist(es, index, todayDate, allhosts_logger)
+    hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05"]
 
-'''Call function for connect to elasticsearch'''
-es = connect_elasticsearch(allhosts_logger)
+    '''Call function for allhosts logger config'''
+    allhosts_logger = create_logger("ALLHosts")
 
-# Script variables
-processDays = "now-30d/d"
-# hostnameList = create_hostlist(es, index, todayDate, allhosts_logger)
-hostnameList = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05"]
+    '''Call function for connect to elasticsearch'''
+    es = connect_elasticsearch(allhosts_logger)
 
+    allhosts_logger.warning(f'The createModel script is started for {processdays}.')
 
-# Main function()
-def main(_queue, _thread, logger):
-    while not _queue.empty():
-        hostname = _queue.get()
-        df_hostname = pd.DataFrame()
+    q = Queue(maxsize=0)  # 0 means infinite
+    num_threads = 3
+    thread_list = []
 
-        '''Use these variables for just log files'''
-        orderhost = hostnameList.index(hostname) + 1
-        lenlist = len(hostnameList)
+    for j in hostname_list:
+        q.put(j)
 
-        '''Call function for singlehost logger config'''
-        singlehost_logger = create_logger(hostname)
+    for i in range(num_threads):
+        thread = threading.Thread(target=generate_models, args=(es, q, i, processdays, hostname_list,
+                                                                allhosts_logger,), daemon=True)
+        thread.start()
+        thread_list.append(thread)
 
-        singlehost_logger.warning(f'{orderhost} of {lenlist}: {hostname}')
-        singlehost_logger.warning(f'Running Thread-{_thread}')
+    for thread in thread_list:
+        thread.join()
 
-        try:
-            for key in featuresDict:
-                '''Call function for create ALL dataFrame by hostname'''
-                df_hostname = get_features(es, hostname, key, featuresDict[key], processDays, df_hostname, singlehost_logger)
-
-            singlehost_logger.warning(f'ALL dataFrame created for {hostname}')
-
-            '''Call function for create ALL model by hostname'''
-            create_model(df_hostname, hostname, "ALL", singlehost_logger)
-
-            singlehost_logger.warning(f'the createModel script end for {hostname}')
-            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
-        except Exception as error:
-            singlehost_logger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
-            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} end with ERROR:{error}!')
-            return True
+    if threading.activeCount() == 1:
+        allhosts_logger.warning("The createModel script finished for ALL hosts.")
 
 
-allhosts_logger.warning(f'The createModel script is started for {processDays}.')
-
-queue = queue.Queue(maxsize=0)  # 0 means infinite
-for j in hostnameList:
-    queue.put(j)
-
-num_threads = 3
-threads = []
-for thread in range(num_threads):
-    worker = threading.Thread(target=main, args=(queue, thread, allhosts_logger,), daemon=True)
-    worker.start()
-    threads.append(worker)
-
-for worker in threads:
-    worker.join()
-
-if threading.activeCount() == 1:
-    allhosts_logger.warning("The createModel script finished for ALL hosts.")
+if __name__ == "__main__":
+    main()

@@ -5,3 +5,4 @@
 /.idea/
 /predictAll_log.txt
 /predictSingle_log.txt
+/__pycache__

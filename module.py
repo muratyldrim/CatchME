@@ -5,8 +5,6 @@ import datetime
 import pandas as pd
 import joblib
 import logging
-import queue
-import threading
 import pymysql
 from elasticsearch import Elasticsearch
 from pandasticsearch import Select
@@ -19,6 +17,7 @@ import plotly.graph_objs as go
 # Common variables
 index = "metricbeat-6.8.9-"
 todayDate = datetime.datetime.today().strftime("%Y.%m.%d")
+
 
 ''' Feature list '''
 cpu = ["@timestamp",
@@ -199,3 +198,36 @@ def get_features(conn, host, metricset, features, days, df_featureall, logger):
     df_featureall = pd.merge(df_featureall, df_feature, left_index=True, right_index=True, how='outer')
     df_featureall.dropna(inplace=True)
     return df_featureall
+
+
+def generate_models(conn, _queue, _thread, days, hostlist, logger):
+    while not _queue.empty():
+        hostname = _queue.get()
+        df_hostname = pd.DataFrame()
+
+        '''Use these variables for just log files'''
+        orderhost = hostlist.index(hostname) + 1
+        lenlist = len(hostlist)
+
+        '''Call function for singlehost logger config'''
+        singlehost_logger = create_logger(hostname)
+
+        singlehost_logger.warning(f'{orderhost} of {lenlist}: {hostname}')
+        singlehost_logger.warning(f'Running Thread-{_thread}')
+
+        try:
+            for key in featuresDict:
+                '''Call function for create ALL dataFrame by hostname'''
+                df_hostname = get_features(conn, hostname, key, featuresDict[key], days, df_hostname, singlehost_logger)
+
+            singlehost_logger.warning(f'ALL dataFrame created for {hostname}')
+
+            '''Call function for create ALL model by hostname'''
+            create_model(df_hostname, hostname, "ALL", singlehost_logger)
+
+            singlehost_logger.warning(f'the createModel script end for {hostname}')
+            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+        except Exception as error:
+            singlehost_logger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
+            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} end with ERROR:{error}!')
+            pass
