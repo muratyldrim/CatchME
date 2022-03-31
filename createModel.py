@@ -11,7 +11,7 @@ def main():
     hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05"]
 
     '''Call function for allhosts logger config'''
-    allhosts_logger = create_logger("ALLHosts")
+    allhosts_logger = create_logger("ALLHosts", "createModel")
 
     '''Call function for connect to elasticsearch'''
     es = connect_elasticsearch(allhosts_logger)

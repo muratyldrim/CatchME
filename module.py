@@ -36,39 +36,39 @@ load = ["@timestamp",
         "system.load.5",
         "system.load.15"]
 
-socketSummary = ["@timestamp",
-                 "system.socket.summary.tcp.all.established",
-                 "system.socket.summary.tcp.all.close_wait",
-                 "system.socket.summary.tcp.all.time_wait",
-                 "system.socket.summary.tcp.all.count",
-                 "system.socket.summary.all.count"]
+socket_summary = ["@timestamp",
+                  "system.socket.summary.tcp.all.established",
+                  "system.socket.summary.tcp.all.close_wait",
+                  "system.socket.summary.tcp.all.time_wait",
+                  "system.socket.summary.tcp.all.count",
+                  "system.socket.summary.all.count"]
 
-processSummary = ["@timestamp",
-                  "system.process.summary.running",
-                  "system.process.summary.sleeping",
-                  "system.process.summary.stopped",
-                  "system.process.summary.zombie",
-                  "system.process.summary.total"]
+process_summary = ["@timestamp",
+                   "system.process.summary.running",
+                   "system.process.summary.sleeping",
+                   "system.process.summary.stopped",
+                   "system.process.summary.zombie",
+                   "system.process.summary.total"]
 
 ''' Create dictionary from features. Uses for loop by metrics. '''
 featuresDict = {'cpu': cpu,
                 'memory': memory,
                 'load': load,
-                'socket_summary': socketSummary,
-                'process_summary': processSummary
+                'socket_summary': socket_summary,
+                'process_summary': process_summary
                 }
 
 
 # Functions
-def create_logger(loggername):
+def create_logger(logger_name, logfile_name):
     log_dir = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\logs"
     log_format = '%(asctime)s - %(levelname)s : %(message)s'
     log_level = logging.WARNING
     log_date = '%d-%b-%y %H:%M:%S'
     log_formatter = logging.Formatter(fmt=log_format, datefmt=log_date)
 
-    loggername_logfile = f'\\{loggername}_createModel_log.txt'
-    loggername_logger = logging.getLogger(loggername)
+    loggername_logfile = f'\\{logger_name}_{logfile_name}_log.txt'
+    loggername_logger = logging.getLogger(logger_name)
     loggername_handler = logging.FileHandler(log_dir + loggername_logfile, mode='w')
     loggername_handler.setLevel(log_level)
     loggername_handler.setFormatter(log_formatter)
@@ -143,12 +143,13 @@ def create_model(df_name, host, feature, logger):
 
         joblib.dump(scaler, scaler_file)
         joblib.dump(iforest_model, model_file)
+
         logger.warning(f'{feature} model&scaler created for {host}')
     else:
         logger.warning(f'{feature} model&scaler creation for {host} FAILED!')
 
 
-def get_features(conn, host, metricset, features, days, df_featureall, logger):
+def get_features(conn, host, metricset, features, days, df_featureall, func, logger):
     es_query = {
         "_source": {
             "includes": features
@@ -185,6 +186,7 @@ def get_features(conn, host, metricset, features, days, df_featureall, logger):
     res = conn.search(index="metricbeat-6.8.9*", body=es_query, size=50000, request_timeout=100)
 
     df_feature = Select.from_dict(res).to_pandas()
+
     logger.warning(f'{metricset} dataFrame created for {host}')
 
     df_feature["datetime"] = pd.to_datetime(df_feature["@timestamp"]).dt.strftime('%Y-%m-%d-%H:%M')
@@ -192,8 +194,8 @@ def get_features(conn, host, metricset, features, days, df_featureall, logger):
     df_feature = df_feature.sort_values("datetime").set_index("datetime")
     df_feature.dropna(inplace=True)
 
-    '''Call function for create model by metricset'''
-    create_model(df_feature, host, metricset, logger)
+    '''Call create_model function for create model by metricset'''
+    func(df_feature, host, metricset, logger)
 
     df_featureall = pd.merge(df_featureall, df_feature, left_index=True, right_index=True, how='outer')
     df_featureall.dropna(inplace=True)
@@ -210,24 +212,189 @@ def generate_models(conn, _queue, _thread, days, hostlist, logger):
         lenlist = len(hostlist)
 
         '''Call function for singlehost logger config'''
-        singlehost_logger = create_logger(hostname)
+        singlehost_logger = create_logger(hostname, "createModel")
 
         singlehost_logger.warning(f'{orderhost} of {lenlist}: {hostname}')
         singlehost_logger.warning(f'Running Thread-{_thread}')
 
         try:
             for key in featuresDict:
-                '''Call function for create ALL dataFrame by hostname'''
-                df_hostname = get_features(conn, hostname, key, featuresDict[key], days, df_hostname, singlehost_logger)
+                '''Call function for create ALL dataFrame and create models from them by hostname'''
+                df_hostname = get_features(conn, hostname, key, featuresDict[key], days, df_hostname,
+                                           create_model, singlehost_logger)
 
-            singlehost_logger.warning(f'ALL dataFrame created for {hostname}')
+            singlehost_logger.warning(f'ALL metricsets models created for {hostname}')
 
-            '''Call function for create ALL model by hostname'''
+            '''Call function to create model for ALL dataFrame by hostname'''
             create_model(df_hostname, hostname, "ALL", singlehost_logger)
 
             singlehost_logger.warning(f'the createModel script end for {hostname}')
             logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+
         except Exception as error:
             singlehost_logger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
             logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} end with ERROR:{error}!')
+            pass
+
+
+# Classes
+class Finder:
+
+    @staticmethod
+    def find_model(host, feature, logger):
+        models_path = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\models"
+        model_dir = os.listdir(models_path)
+
+        for modelname in model_dir:
+            if re.search(f'{host}_{feature}', modelname):
+                logger.warning(f'found {modelname}')
+                return os.path.join(models_path, modelname)
+
+    @staticmethod
+    def find_scaler(host, feature, logger):
+        scalers_path = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\scalers"
+        scaler_dir = os.listdir(scalers_path)
+
+        for scalername in scaler_dir:
+            if re.search(f'{host}_{feature}', scalername):
+                logger.warning(f'found {scalername}')
+                return os.path.join(scalers_path, scalername)
+
+
+class InsertDB:
+
+    @staticmethod
+    def insert_mysql(host, feature, status, score, logger):
+        sql = 'INSERT INTO unixdb.catchme_dev(hostname, feature, status, score) VALUES (%s, %s, %s, %s)'
+        values = (host, feature, status[0], score[0])
+
+        '''esenyurt db operations'''
+        mysql_esy = pymysql.connect(host='10.86.36.170',
+                                    user='root',
+                                    password='5ucub4Day',
+                                    db='unixdb',
+                                    charset='utf8mb4')
+
+        cursor_esy = mysql_esy.cursor()
+        cursor_esy.execute(sql, values)
+        mysql_esy.commit()
+
+        logger.warning(f'inserting to mysql_esy for {host}')
+
+        ''''gaziemir db operations'''
+        mysql_gzm = pymysql.connect(host='172.31.44.50',
+                                    user='superadmin',
+                                    password='superadmin',
+                                    db='unixdb',
+                                    charset='utf8mb4')
+
+        cursor_gzm = mysql_gzm.cursor()
+        cursor_gzm.execute(sql, values)
+        mysql_gzm.commit()
+
+        logger.warning(f'inserting to mysql_gzm for {host}')
+
+    @staticmethod
+    def insert_es(df_name, host, date, conn, logger):
+        indexname = "dev_catchme_" + date
+        df_name["hostname"] = host
+        df_name["@timestamp"] = pd.to_datetime(df_name.index, format="%Y-%m-%d-%H:%M")
+        esdocs = df_name.to_dict(orient='records')
+        bulk(conn, esdocs, index=indexname, doc_type='doc', request_timeout=60)
+
+        logger.warning(f'inserting to es index: {indexname} for {host}')
+
+
+def predict_feature(df_name, host, feature, logger):
+    if df_name.shape[0] > 0:
+        model_file = Finder.find_model(host, feature, logger)
+        scaler_file = Finder.find_scaler(host, feature, logger)
+
+        scaler = joblib.load(scaler_file)
+        model = joblib.load(model_file)
+
+        logger.warning(f'started to predict {feature} data for {host}')
+        scaled_test_data = scaler.transform(df_name)
+        predict_result = model.predict(scaled_test_data)
+        score = model.decision_function(scaled_test_data)
+
+        df_name[f'{feature}_label'] = predict_result
+        df_name[f'{feature}_score'] = score
+
+        if score[0] < -0.1:
+
+            '''Call function for insert mysql'''
+            InsertDB.insert_mysql(host, feature, predict_result, score, logger)
+
+            logger.warning(f'{feature} anomaly detected for {host}')
+        else:
+            logger.warning(f'no {feature} anomaly detect for {host}')
+    else:
+        logger.warning(f'predict {feature} data for {host} FAILED!')
+
+
+def create_resultdf(df_name, host, dictionary, logger):
+    list_columns = []
+
+    for i in dictionary:
+        list_columns.append(f'{i}_score')
+        list_columns.append(f'{i}_label')
+
+    logger.warning(f'Result dataFrame created for {host}')
+
+    df_result = df_name[list_columns].copy()
+    return df_result
+
+
+def predict_models(conn, _queue, _thread, days, hostlist, logger):
+    while not _queue.empty():
+        hostname = _queue.get()
+        df_hostname = pd.DataFrame()
+
+        '''Use these variables for just log files'''
+        orderhost = hostlist.index(hostname) + 1
+        lenlist = len(hostlist)
+
+        '''Call function for singlehost logger config'''
+        singlehost_logger = create_logger(hostname, "predictModel")
+
+        singlehost_logger.warning(f'{orderhost} of {lenlist}: {hostname}')
+        singlehost_logger.warning(f'Running Thread-{_thread}')
+
+        try:
+            for key in featuresDict:
+                '''Call function for creates ALL dataFrame and predict models from them by hostname'''
+                df_hostname = get_features(conn, hostname, key, featuresDict[key], days, df_hostname,
+                                           predict_feature, singlehost_logger)
+
+            singlehost_logger.warning(f'ALL metricsets model predicted for {hostname}')
+
+            '''Call function for creates a dataFrame only the score and label column by hostname'''
+            df_hostname_result = create_resultdf(df_hostname, hostname, featuresDict, singlehost_logger)
+
+            '''Convert dataFrame to origin version without score and label column by hostname '''
+            df_hostname.drop(columns=df_hostname_result, inplace=True)
+
+            '''Call function to predict model for ALL dataFrame by hostname'''
+            predict_feature(df_hostname, hostname, "ALL", singlehost_logger)
+
+            if df_hostname.shape[0] > 0:
+                df_hostname_result["ALL_score"] = df_hostname["ALL_score"]
+                df_hostname_result["ALL_label"] = df_hostname["ALL_label"]
+                df_hostname.drop(columns=["ALL_score", "ALL_label"], inplace=True)
+
+                singlehost_logger.warning(f'created {hostname}_result for ALL dataFrame')
+
+                '''Call function for insert elasticsearch'''
+                InsertDB.insert_es(df_hostname_result, hostname, todayDate, conn, logger)
+
+                singlehost_logger.warning(f'the predictModel script end for {hostname}\n')
+                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+            else:
+                singlehost_logger.warning(f'the predictModel script end for {hostname} with ERROR!\n')
+                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+
+        except Exception as error:
+            singlehost_logger.warning(f'the predictModel script end for {hostname} with ERROR:{error}!\n')
+            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
             pass
