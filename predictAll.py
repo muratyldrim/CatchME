@@ -19,7 +19,7 @@ def main():
     allhosts_logger.warning(f'The predictModel script is started for {processdays}.')
 
     q = Queue(maxsize=0)  # 0 means infinite
-    num_threads = 1
+    num_threads = 5
     thread_list = []
 
     for j in hostname_list:

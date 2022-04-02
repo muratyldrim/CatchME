@@ -1,5 +1,4 @@
 import os
-import sys
 import re
 import datetime
 import pandas as pd
@@ -19,7 +18,7 @@ index = "metricbeat-6.8.9-"
 todayDate = datetime.datetime.today().strftime("%Y.%m.%d")
 
 
-''' Feature list '''
+# Feature list
 cpu = ["@timestamp",
        "system.cpu.user.pct",
        "system.cpu.system.pct",
@@ -69,9 +68,11 @@ def create_logger(logger_name, logfile_name):
 
     loggername_logfile = f'\\{logger_name}_{logfile_name}_log.txt'
     loggername_logger = logging.getLogger(logger_name)
+
     loggername_handler = logging.FileHandler(log_dir + loggername_logfile, mode='w')
     loggername_handler.setLevel(log_level)
     loggername_handler.setFormatter(log_formatter)
+
     loggername_logger.addHandler(loggername_handler)
     return loggername_logger
 
@@ -149,6 +150,61 @@ def create_model(df_name, host, feature, logger):
         logger.warning(f'{feature} model&scaler creation for {host} FAILED!')
 
 
+def predict_feature(df_name, host, feature, logger):
+    if df_name.shape[0] > 0:
+        model_file = Finder.find_model(host, feature, logger)
+        scaler_file = Finder.find_scaler(host, feature, logger)
+
+        scaler = joblib.load(scaler_file)
+        model = joblib.load(model_file)
+
+        logger.warning(f'starting to predict {feature} data for {host}')
+
+        scaled_test_data = scaler.transform(df_name)
+        predict_result = model.predict(scaled_test_data)
+        score = model.decision_function(scaled_test_data)
+
+        df_name[f'{feature}_label'] = predict_result
+        df_name[f'{feature}_score'] = score
+
+        if score[0] < -0.1:
+
+            '''Call function for insert mysql'''
+            InsertDB.insert_mysql(host, feature, predict_result, score, logger)
+
+            logger.warning(f'{feature} anomaly detected for {host}')
+        else:
+            logger.warning(f'no {feature} anomaly detect for {host}')
+    else:
+        logger.warning(f'predict {feature} data for {host} FAILED!')
+
+
+def create_predict_feature(df_name, host, feature, logger):
+    logger.warning(f'starting to create model and predict {feature} data for {host}')
+
+    std_scaler = StandardScaler()
+    std_scaled_data = std_scaler.fit_transform(df_name)
+    iforest_model = IsolationForest(contamination=0.003)
+    predict_result = iforest_model.fit_predict(std_scaled_data)
+    score = iforest_model.decision_function(std_scaled_data)
+
+    df_name[f'{feature}_score'] = score
+    df_name[f'{feature}_label'] = predict_result
+
+
+def create_resultdf(df_name, host, dictionary, logger):
+    list_columns = []
+
+    for i in dictionary:
+        list_columns.append(f'{i}_score')
+        list_columns.append(f'{i}_label')
+
+    logger.warning(f'Result dataFrame created for {host}')
+
+    df_result = df_name[list_columns].copy()
+    return df_result
+
+
 def get_features(conn, host, metricset, features, days, df_featureall, func, logger):
     es_query = {
         "_source": {
@@ -192,6 +248,7 @@ def get_features(conn, host, metricset, features, days, df_featureall, func, log
     df_feature["datetime"] = pd.to_datetime(df_feature["@timestamp"]).dt.strftime('%Y-%m-%d-%H:%M')
     df_feature.drop(columns=["@timestamp", "_index", "_type", "_id", "_score"], inplace=True)
     df_feature = df_feature.sort_values("datetime").set_index("datetime")
+    df_feature = df_feature.sort_index(axis=1)
     df_feature.dropna(inplace=True)
 
     '''Call create_model function for create model by metricset'''
@@ -223,7 +280,7 @@ def generate_models(conn, _queue, _thread, days, hostlist, logger):
                 df_hostname = get_features(conn, hostname, key, featuresDict[key], days, df_hostname,
                                            create_model, singlehost_logger)
 
-            singlehost_logger.warning(f'ALL metricsets models created for {hostname}')
+            singlehost_logger.warning(f'ALL metricsets dataFrame created for {hostname}')
 
             '''Call function to create model for ALL dataFrame by hostname'''
             create_model(df_hostname, hostname, "ALL", singlehost_logger)
@@ -235,6 +292,134 @@ def generate_models(conn, _queue, _thread, days, hostlist, logger):
             singlehost_logger.warning(f'the createModel script end for {hostname} with ERROR:{error}!')
             logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} end with ERROR:{error}!')
             pass
+
+
+def predict_models(conn, _queue, _thread, days, hostlist, logger):
+    while not _queue.empty():
+        hostname = _queue.get()
+        df_hostname = pd.DataFrame()
+
+        '''Use these variables for just log files'''
+        orderhost = hostlist.index(hostname) + 1
+        lenlist = len(hostlist)
+
+        '''Call function for singlehost logger config'''
+        singlehost_logger = create_logger(hostname, "predictModel")
+
+        singlehost_logger.warning(f'{orderhost} of {lenlist}: {hostname}')
+        singlehost_logger.warning(f'Running Thread-{_thread}')
+
+        try:
+            for key in featuresDict:
+                '''Call function for creates ALL dataFrame and predict models from them by hostname'''
+                df_hostname = get_features(conn, hostname, key, featuresDict[key], days, df_hostname,
+                                           predict_feature, singlehost_logger)
+
+            singlehost_logger.warning(f'ALL metricsets dataFrame created for {hostname}')
+
+            '''Call function for creates a dataFrame only the score and label column by hostname'''
+            df_hostname_result = create_resultdf(df_hostname, hostname, featuresDict, singlehost_logger)
+
+            '''Convert dataFrame to origin version without score and label column by hostname '''
+            df_hostname.drop(columns=df_hostname_result, inplace=True)
+
+            '''Call function to predict model for ALL dataFrame by hostname'''
+            predict_feature(df_hostname, hostname, "ALL", singlehost_logger)
+
+            if df_hostname.shape[0] > 0:
+                df_hostname_result["ALL_score"] = df_hostname["ALL_score"]
+                df_hostname_result["ALL_label"] = df_hostname["ALL_label"]
+                df_hostname.drop(columns=["ALL_score", "ALL_label"], inplace=True)
+
+                '''Call function for insert elasticsearch'''
+                InsertDB.insert_es(df_hostname_result, hostname, todayDate, conn, singlehost_logger)
+
+                singlehost_logger.warning(f'the predictModel script end for {hostname}\n')
+                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+            else:
+                singlehost_logger.warning(f'the predictModel script end for {hostname} with ERROR!\n')
+                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+
+        except Exception as error:
+            singlehost_logger.warning(f'the predictModel script end for {hostname} with ERROR:{error}!\n')
+            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+            pass
+
+
+def plotly_visulation(cls_name, host, df_name, logger):
+    logger.warning(f'starting visualization for {host}')
+
+    '''create objects'''
+    cpu = cls_name("cpu", df_name)
+    memory = cls_name("memory", df_name)
+    load = cls_name("load", df_name)
+    socket_summary = cls_name("socket_summary", df_name)
+    process_summary = cls_name("process_summary", df_name)
+    ALL = CreateVisual("ALL", df_name)
+
+    fig = go.Figure()
+
+    '''adding score values'''
+    fig.add_trace(go.Scatter(x=cpu.score_date, y=cpu.score_name, mode="lines",
+                             name="cpu score", line=dict(color="lightslategray")))
+
+    fig.add_trace(go.Scatter(x=memory.score_date, y=memory.score_name, mode="lines",
+                             name="memory score", line=dict(color="coral")))
+
+    fig.add_trace(go.Scatter(x=load.score_date, y=load.score_name, mode="lines",
+                             name="load score", line=dict(color="darkseagreen")))
+
+    fig.add_trace(go.Scatter(x=socket_summary.score_date, y=socket_summary.score_name, mode="lines",
+                             name="socket score", line=dict(color="cornflowerblue")))
+
+    fig.add_trace(go.Scatter(x=process_summary.score_date, y=process_summary.score_name, mode="lines",
+                             name="process score", line=dict(color="darkgoldenrod")))
+
+    fig.add_trace(go.Scatter(x=ALL.score_date, y=ALL.score_name, mode="lines",
+                             name="ALL score", line=dict(color="firebrick")))
+
+    '''adding anomaly valus'''
+    fig.add_trace(go.Scatter(x=cpu.anomaly_date, y=cpu.anomaly_name, mode="markers",
+                             name="cpu - " + cpu.anomaly_count, marker=dict(size=8, color="lightslategray")))
+
+    fig.add_trace(go.Scatter(x=memory.anomaly_date, y=memory.anomaly_name, mode="markers",
+                             name="memory - " + memory.anomaly_count, marker=dict(size=8, color="coral")))
+
+    fig.add_trace(go.Scatter(x=load.anomaly_date, y=load.anomaly_name, mode="markers",
+                             name="load - " + load.anomaly_count, marker=dict(size=8, color="darkseagreen")))
+
+    fig.add_trace(go.Scatter(x=socket_summary.anomaly_date, y=socket_summary.anomaly_name, mode="markers",
+                             name="socket - " + socket_summary.anomaly_count,
+                             marker=dict(size=8, color="cornflowerblue")))
+
+    fig.add_trace(go.Scatter(x=process_summary.anomaly_date, y=process_summary.anomaly_name, mode="markers",
+                             name="process - " + process_summary.anomaly_count,
+                             marker=dict(size=8, color="darkgoldenrod")))
+
+    fig.add_trace(go.Scatter(x=ALL.anomaly_date, y=ALL.anomaly_name, mode="markers",
+                             name="ALL - " + ALL.anomaly_count, marker=dict(size=8, color="firebrick")))
+
+    fig.update_layout(title=f'{host} Anomaly',
+                      title_x=0.5,
+                      width=1500,
+                      height=800,
+                      paper_bgcolor="whitesmoke",
+                      template="seaborn",
+                      xaxis=dict(
+                                rangeselector=dict
+                                (
+                                    buttons=list
+                                    ([
+                                        dict(count=7, label='7d', step='day', stepmode='backward'),
+                                        dict(count=15, label='15d', step='day', stepmode='backward'),
+                                        dict(count=30, label='30d', step='day', stepmode='backward')
+                                    ])
+                                ),
+                                rangeslider=dict(visible=False), type='date')
+                      )
+    fig.show()
+
+    logger.warning(f'the visualization completed for {host}')
 
 
 # Classes
@@ -292,7 +477,7 @@ class InsertDB:
         cursor_gzm.execute(sql, values)
         mysql_gzm.commit()
 
-        logger.warning(f'inserting to mysql_gzm for {host}')
+        logger.warning(f'anomaly detected! inserting score and anomaly values to mysql_gzm for {host}')
 
     @staticmethod
     def insert_es(df_name, host, date, conn, logger):
@@ -302,99 +487,31 @@ class InsertDB:
         esdocs = df_name.to_dict(orient='records')
         bulk(conn, esdocs, index=indexname, doc_type='doc', request_timeout=60)
 
-        logger.warning(f'inserting to es index: {indexname} for {host}')
+        logger.warning(f'inserting score and anomaly values to es index: {indexname} for {host}')
 
 
-def predict_feature(df_name, host, feature, logger):
-    if df_name.shape[0] > 0:
-        model_file = Finder.find_model(host, feature, logger)
-        scaler_file = Finder.find_scaler(host, feature, logger)
+class CreateVisual:
+    def __init__(self, name, df_name):
+        self.name = name
+        self.df_hostname_result = df_name
+        self.score_name = self.score_name()
+        self.score_date = self.score_date()
+        self.anomaly_name = self.anomaly_name()
+        self.anomaly_date = self.anomaly_date()
+        self.anomaly_count = self.anomaly_count()
 
-        scaler = joblib.load(scaler_file)
-        model = joblib.load(model_file)
+    def score_name(self):
+        return self.df_hostname_result[f'{self.name}_score']
 
-        logger.warning(f'started to predict {feature} data for {host}')
-        scaled_test_data = scaler.transform(df_name)
-        predict_result = model.predict(scaled_test_data)
-        score = model.decision_function(scaled_test_data)
+    def score_date(self):
+        return pd.to_datetime(self.df_hostname_result.index)
 
-        df_name[f'{feature}_label'] = predict_result
-        df_name[f'{feature}_score'] = score
+    def anomaly_name(self):
+        return self.df_hostname_result[f'{self.name}_label'][self.df_hostname_result[f'{self.name}_label'] == -1]
 
-        if score[0] < -0.1:
+    def anomaly_date(self):
+        return pd.to_datetime(self.df_hostname_result.index[self.df_hostname_result[f'{self.name}_label'] == -1])
 
-            '''Call function for insert mysql'''
-            InsertDB.insert_mysql(host, feature, predict_result, score, logger)
-
-            logger.warning(f'{feature} anomaly detected for {host}')
-        else:
-            logger.warning(f'no {feature} anomaly detect for {host}')
-    else:
-        logger.warning(f'predict {feature} data for {host} FAILED!')
-
-
-def create_resultdf(df_name, host, dictionary, logger):
-    list_columns = []
-
-    for i in dictionary:
-        list_columns.append(f'{i}_score')
-        list_columns.append(f'{i}_label')
-
-    logger.warning(f'Result dataFrame created for {host}')
-
-    df_result = df_name[list_columns].copy()
-    return df_result
-
-
-def predict_models(conn, _queue, _thread, days, hostlist, logger):
-    while not _queue.empty():
-        hostname = _queue.get()
-        df_hostname = pd.DataFrame()
-
-        '''Use these variables for just log files'''
-        orderhost = hostlist.index(hostname) + 1
-        lenlist = len(hostlist)
-
-        '''Call function for singlehost logger config'''
-        singlehost_logger = create_logger(hostname, "predictModel")
-
-        singlehost_logger.warning(f'{orderhost} of {lenlist}: {hostname}')
-        singlehost_logger.warning(f'Running Thread-{_thread}')
-
-        try:
-            for key in featuresDict:
-                '''Call function for creates ALL dataFrame and predict models from them by hostname'''
-                df_hostname = get_features(conn, hostname, key, featuresDict[key], days, df_hostname,
-                                           predict_feature, singlehost_logger)
-
-            singlehost_logger.warning(f'ALL metricsets model predicted for {hostname}')
-
-            '''Call function for creates a dataFrame only the score and label column by hostname'''
-            df_hostname_result = create_resultdf(df_hostname, hostname, featuresDict, singlehost_logger)
-
-            '''Convert dataFrame to origin version without score and label column by hostname '''
-            df_hostname.drop(columns=df_hostname_result, inplace=True)
-
-            '''Call function to predict model for ALL dataFrame by hostname'''
-            predict_feature(df_hostname, hostname, "ALL", singlehost_logger)
-
-            if df_hostname.shape[0] > 0:
-                df_hostname_result["ALL_score"] = df_hostname["ALL_score"]
-                df_hostname_result["ALL_label"] = df_hostname["ALL_label"]
-                df_hostname.drop(columns=["ALL_score", "ALL_label"], inplace=True)
-
-                singlehost_logger.warning(f'created {hostname}_result for ALL dataFrame')
-
-                '''Call function for insert elasticsearch'''
-                InsertDB.insert_es(df_hostname_result, hostname, todayDate, conn, logger)
-
-                singlehost_logger.warning(f'the predictModel script end for {hostname}\n')
-                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
-            else:
-                singlehost_logger.warning(f'the predictModel script end for {hostname} with ERROR!\n')
-                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
-
-        except Exception as error:
-            singlehost_logger.warning(f'the predictModel script end for {hostname} with ERROR:{error}!\n')
-            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
-            pass
+    def anomaly_count(self):
+        return str(self.df_hostname_result[f'{self.name}_label']
+                   [self.df_hostname_result[f'{self.name}_label'] == -1].count())
