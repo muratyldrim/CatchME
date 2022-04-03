@@ -10,12 +10,12 @@ def main():
     df_hostname = pd.DataFrame()
 
     '''Call function for logger config'''
-    singlehost_logger = create_logger("ALLHosts", "createANDpredictModel")
+    singlehost_logger = create_logger("ALLHosts", "createANDpredict")
 
     '''Call function for connect to elasticsearch'''
     es = connect_elasticsearch(singlehost_logger)
 
-    singlehost_logger.warning(f'The createANDpredictModel script is running for {hostname} for {processdays}.')
+    singlehost_logger.warning(f'The createANDpredict script is running for {hostname} for {processdays}.')
 
     try:
         for key in featuresDict:
@@ -37,9 +37,9 @@ def main():
             df_hostname_result["ALL_label"] = df_hostname["ALL_label"]
             df_hostname.drop(columns=["ALL_score", "ALL_label"], inplace=True)
 
-            singlehost_logger.warning(f'the predictSingle script end for {hostname}')
+            singlehost_logger.warning(f'the createANDpredict script end for {hostname}')
     except Exception as error:
-        singlehost_logger.warning(f'the createANDpredictModel script end for {hostname} with ERROR:{error}!')
+        singlehost_logger.warning(f'the createANDpredict script end for {hostname} with ERROR:{error}!')
         return True
 
     '''Call function to plotly visualiton'''

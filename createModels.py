@@ -6,17 +6,17 @@ from queue import Queue
 # Main Function
 def main():
     # Script variables
-    processdays = "now-5m/m"
+    processdays = "now-30d/d"
     # hostname_list = create_hostlist(es, index, todayDate, allhosts_logger)
     hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05"]
 
     '''Call function for allhosts logger config'''
-    allhosts_logger = create_logger("ALLHosts", "predictModel")
+    allhosts_logger = create_logger("ALLHosts", "createModels")
 
     '''Call function for connect to elasticsearch'''
     es = connect_elasticsearch(allhosts_logger)
 
-    allhosts_logger.warning(f'The predictModel script is started for {processdays}.')
+    allhosts_logger.warning(f'The createModels script is started for {processdays}.')
 
     q = Queue(maxsize=0)  # 0 means infinite
     num_threads = 5
@@ -26,8 +26,8 @@ def main():
         q.put(j)
 
     for i in range(num_threads):
-        thread = threading.Thread(target=predict_models, args=(es, q, i, processdays, hostname_list,
-                                                               allhosts_logger,), daemon=True)
+        thread = threading.Thread(target=generate_models, args=(es, q, i, processdays, hostname_list,
+                                                                allhosts_logger,), daemon=True)
         thread.start()
         thread_list.append(thread)
 
@@ -35,7 +35,7 @@ def main():
         thread.join()
 
     if threading.activeCount() == 1:
-        allhosts_logger.warning("The predictModel script finished for ALL hosts.")
+        allhosts_logger.warning("The createModels script finished for ALL hosts.")
 
 
 if __name__ == "__main__":
