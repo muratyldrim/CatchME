@@ -24,11 +24,16 @@ cpu = ["@timestamp",
        "system.cpu.system.pct",
        "system.cpu.iowait.pct",
        "system.cpu.idle.pct",
+       "system.cpu.nice.pct",
+       "system.cpu.irq.pct",
+       "system.cpu.softirq.pct",
+       "system.cpu.steal.pct",
        "system.cpu.total.pct"]
 
 memory = ["@timestamp",
           "system.memory.actual.free",
-          "system.memory.swap.used.pct"]
+          "system.memory.swap.used.pct",
+          "system.memory.hugepages.used.pct"]
 
 load = ["@timestamp",
         "system.load.1",
@@ -36,6 +41,7 @@ load = ["@timestamp",
         "system.load.15"]
 
 socket_summary = ["@timestamp",
+                  "system.socket.summary.tcp.all.listening",
                   "system.socket.summary.tcp.all.established",
                   "system.socket.summary.tcp.all.close_wait",
                   "system.socket.summary.tcp.all.time_wait",
@@ -47,6 +53,8 @@ process_summary = ["@timestamp",
                    "system.process.summary.sleeping",
                    "system.process.summary.stopped",
                    "system.process.summary.zombie",
+                   "system.process.summary.idle",
+                   "system.process.summary.dead",
                    "system.process.summary.total"]
 
 ''' Create dictionary from features. Uses for loop by metrics. '''
@@ -251,7 +259,7 @@ def get_features(conn, host, metricset, features, days, df_featureall, func, log
     df_feature = df_feature.sort_index(axis=1)
     df_feature.dropna(inplace=True)
 
-    '''Call create_model function for create model by metricset'''
+    '''Call create_model OR predict_feature function by metricset'''
     func(df_feature, host, metricset, logger)
 
     df_featureall = pd.merge(df_featureall, df_feature, left_index=True, right_index=True, how='outer')
@@ -341,8 +349,8 @@ def predict_models(conn, _queue, _thread, days, hostlist, logger):
                 logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
 
         except Exception as error:
-            singlehost_logger.warning(f'the predictModels script end for {hostname} with ERROR:{error}!\n')
-            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
+            singlehost_logger.warning(f'the predictModels script end for {hostname} with ERROR:{error}!')
+            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} end with ERROR:{error}!')
             pass
 
 
