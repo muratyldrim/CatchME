@@ -174,15 +174,14 @@ def predict_feature(df_name, host, feature, logger):
 
         df_name[f'{feature}_label'] = predict_result
         df_name[f'{feature}_score'] = score
+        for i in score:
+            if i < -0.1:
+                '''Call function for insert mysql'''
+                InsertDB.insert_mysql(host, feature, i, logger)
 
-        if score[0] < -0.1:
-
-            '''Call function for insert mysql'''
-            InsertDB.insert_mysql(host, feature, predict_result, score, logger)
-
-            logger.warning(f'{feature} anomaly detected for {host}')
-        else:
-            logger.warning(f'no {feature} anomaly detect for {host}')
+                logger.warning(f'{feature} anomaly detected for {host}')
+            else:
+                logger.warning(f'no {feature} anomaly detect for {host}')
     else:
         logger.warning(f'predict {feature} data for {host} FAILED!')
 
@@ -457,9 +456,9 @@ class Finder:
 class InsertDB:
 
     @staticmethod
-    def insert_mysql(host, feature, status, score, logger):
-        sql = 'INSERT INTO unixdb.catchme_dev(hostname, feature, status, score) VALUES (%s, %s, %s, %s)'
-        values = (host, feature, status[0], score[0])
+    def insert_mysql(host, feature, score, logger):
+        sql = 'INSERT INTO unixdb.catchme_dev(hostname, feature, status, score) VALUES (%s, %s, -1, %s)'
+        values = (host, feature, score)
 
         '''esenyurt db operations'''
         mysql_esy = pymysql.connect(host='10.86.36.170',
