@@ -140,11 +140,16 @@ def create_model(df_name, host, feature, logger):
     model_path = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\models\/"
     scaler_path = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\scalers\/"
 
+    if feature == "socket_summary" or feature == "process_summary":
+        cont_num = 0.0007
+    else:
+        cont_num = 0.005
+
     if df_name.shape[0] > 0:
         scaler = StandardScaler().fit(df_name)
         scaled_train_data = scaler.transform(df_name)
 
-        iforest_model = IsolationForest(contamination=0.005)
+        iforest_model = IsolationForest(contamination=cont_num)
         iforest_model.fit(scaled_train_data)
 
         model_file = model_path + host + "_" + feature + "_model.pkl"
@@ -189,9 +194,14 @@ def predict_feature(df_name, host, feature, logger):
 def create_predict_feature(df_name, host, feature, logger):
     logger.warning(f'starting to create model and predict {feature} data for {host}')
 
+    if feature == "socket_summary" or feature == "process_summary":
+        cont_num = 0.0007
+    else:
+        cont_num = 0.005
+
     std_scaler = StandardScaler()
     std_scaled_data = std_scaler.fit_transform(df_name)
-    iforest_model = IsolationForest(contamination=0.003)
+    iforest_model = IsolationForest(contamination=cont_num)
     predict_result = iforest_model.fit_predict(std_scaled_data)
     score = iforest_model.decision_function(std_scaled_data)
 

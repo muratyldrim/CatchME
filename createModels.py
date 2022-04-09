@@ -19,7 +19,7 @@ def main():
     allhosts_logger.warning(f'The createModels script is started for {processdays}.')
 
     q = Queue(maxsize=0)  # 0 means infinite
-    num_threads = 5
+    num_threads = 6
     thread_list = []
 
     for j in hostname_list:
