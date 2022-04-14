@@ -182,7 +182,7 @@ def predict_feature(df_name, host, feature, logger):
         for i in score:
             if i < -0.1:
                 '''Call function for insert mysql'''
-                InsertDB.insert_mysql(host, feature, i, logger)
+                DatabaseOps.insert_mysql(host, feature, i, logger)
 
                 logger.warning(f'{feature} anomaly detected for {host}')
             else:
@@ -349,7 +349,7 @@ def predict_models(conn, _queue, _thread, days, hostlist, logger):
                 df_hostname.drop(columns=["ALL_score", "ALL_label"], inplace=True)
 
                 '''Call function for insert elasticsearch'''
-                InsertDB.insert_es(df_hostname_result, hostname, todayDate, conn, singlehost_logger)
+                DatabaseOps.insert_es(df_hostname_result, hostname, todayDate, conn, singlehost_logger)
 
                 singlehost_logger.warning(f'the predictModels script end for {hostname}\n')
                 logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
@@ -463,7 +463,38 @@ class Finder:
                 return os.path.join(scalers_path, scalername)
 
 
-class InsertDB:
+class DatabaseOps:
+
+    @staticmethod
+    def delete_mysql(logger):
+        interval_days = 120
+        sql = f'DELETE FROM unixdb.catchme_dev WHERE DATETIME < now() - INTERVAL {interval_days} DAY;'
+
+        '''esenyurt db operations'''
+        mysql_esy = pymysql.connect(host='10.86.36.170',
+                                    user='root',
+                                    password='5ucub4Day',
+                                    db='unixdb',
+                                    charset='utf8mb4')
+
+        cursor_esy = mysql_esy.cursor()
+        cursor_esy.execute(sql)
+        mysql_esy.commit()
+
+        logger.warning(f'older than {interval_days} days records deleted from mysql_esy')
+
+        ''''gaziemir db operations'''
+        mysql_gzm = pymysql.connect(host='172.31.44.50',
+                                    user='superadmin',
+                                    password='superadmin',
+                                    db='unixdb',
+                                    charset='utf8mb4')
+
+        cursor_gzm = mysql_gzm.cursor()
+        cursor_gzm.execute(sql)
+        mysql_gzm.commit()
+
+        logger.warning(f'older than {interval_days} days records deleted from mysql_gzm')
 
     @staticmethod
     def insert_mysql(host, feature, score, logger):

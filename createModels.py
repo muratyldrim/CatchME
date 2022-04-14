@@ -16,6 +16,9 @@ def main():
     '''Call function for connect to elasticsearch'''
     es = connect_elasticsearch(allhosts_logger)
 
+    '''Call function for delete old records from mysql dbs'''
+    DatabaseOps.delete_mysql(allhosts_logger)
+
     allhosts_logger.warning(f'The createModels script is started for {processdays}.')
 
     q = Queue(maxsize=0)  # 0 means infinite
