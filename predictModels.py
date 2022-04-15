@@ -16,7 +16,7 @@ def main():
     '''Call function for connect to elasticsearch'''
     es = connect_elasticsearch(allhosts_logger)
 
-    allhosts_logger.warning(f'The predictModels script is started for {processdays}.')
+    allhosts_logger.warning(f'The predictModels script is started for {len(hostname_list)} hosts for {processdays}.')
 
     q = Queue(maxsize=0)  # 0 means infinite
     num_threads = 6
@@ -26,8 +26,7 @@ def main():
         q.put(j)
 
     for i in range(num_threads):
-        thread = threading.Thread(target=predict_models, args=(es, q, i, processdays, hostname_list,
-                                                               allhosts_logger,), daemon=True)
+        thread = threading.Thread(target=predict_models, args=(es, q, i, processdays, hostname_list,), daemon=True)
         thread.start()
         thread_list.append(thread)
 

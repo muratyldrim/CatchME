@@ -39,7 +39,7 @@ def main():
 
             singlehost_logger.warning(f'the createANDpredict script end for {hostname}')
     except Exception as error:
-        singlehost_logger.warning(f'the createANDpredict script end for {hostname} with ERROR:{error}!')
+        singlehost_logger.warning(f'the createANDpredict script end for {hostname} with ERROR: {error}!')
         return True
 
     '''Call function to plotly visualiton'''

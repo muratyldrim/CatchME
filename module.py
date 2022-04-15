@@ -160,7 +160,7 @@ def create_model(df_name, host, feature, logger):
 
         logger.warning(f'{feature} model&scaler created for {host}')
     else:
-        logger.warning(f'{feature} model&scaler creation for {host} FAILED!')
+        logger.warning(f'Getting ERROR: {feature} model&scaler creation for {host} FAILED!')
 
 
 def predict_feature(df_name, host, feature, logger):
@@ -276,7 +276,7 @@ def get_features(conn, host, metricset, features, days, df_featureall, func, log
     return df_featureall
 
 
-def generate_models(conn, _queue, _thread, days, hostlist, logger):
+def generate_models(conn, _queue, _thread, days, hostlist):
     while not _queue.empty():
         hostname = _queue.get()
         df_hostname = pd.DataFrame()
@@ -303,15 +303,13 @@ def generate_models(conn, _queue, _thread, days, hostlist, logger):
             create_model(df_hostname, hostname, "ALL", singlehost_logger)
 
             singlehost_logger.warning(f'the createModels script end for {hostname}')
-            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
 
         except Exception as error:
             singlehost_logger.warning(f'the createModels script end for {hostname} with ERROR:{error}!')
-            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} end with ERROR:{error}!')
             pass
 
 
-def predict_models(conn, _queue, _thread, days, hostlist, logger):
+def predict_models(conn, _queue, _thread, days, hostlist):
     while not _queue.empty():
         hostname = _queue.get()
         df_hostname = pd.DataFrame()
@@ -352,14 +350,11 @@ def predict_models(conn, _queue, _thread, days, hostlist, logger):
                 DatabaseOps.insert_es(df_hostname_result, hostname, todayDate, conn, singlehost_logger)
 
                 singlehost_logger.warning(f'the predictModels script end for {hostname}\n')
-                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
             else:
                 singlehost_logger.warning(f'the predictModels script end for {hostname} with ERROR!\n')
-                logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} done.')
 
         except Exception as error:
             singlehost_logger.warning(f'the predictModels script end for {hostname} with ERROR:{error}!')
-            logger.warning(f'{orderhost} of {lenlist}: Thread-{_thread} running for {hostname} end with ERROR:{error}!')
             pass
 
 
