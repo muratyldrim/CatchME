@@ -8,7 +8,7 @@ def main():
     # Script variables
     processdays = "now-30d/d"
     # hostname_list = create_hostlist(es, index, todayDate, allhosts_logger)
-    hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05"]
+    hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05", "wraap3", "medzd1"]
 
     '''Call function for allhosts logger config'''
     allhosts_logger = create_logger("ALLHosts", "createModels")

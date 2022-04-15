@@ -481,7 +481,7 @@ class DatabaseOps:
         cursor_esy.execute(sql)
         mysql_esy.commit()
 
-        logger.warning(f'older than {interval_days} days records deleted from mysql_esy')
+        logger.warning(f'older than {interval_days} days records deleted from mysql_esy.')
 
         ''''gaziemir db operations'''
         mysql_gzm = pymysql.connect(host='172.31.44.50',
@@ -494,7 +494,7 @@ class DatabaseOps:
         cursor_gzm.execute(sql)
         mysql_gzm.commit()
 
-        logger.warning(f'older than {interval_days} days records deleted from mysql_gzm')
+        logger.warning(f'older than {interval_days} days records deleted from mysql_gzm.')
 
     @staticmethod
     def insert_mysql(host, feature, score, logger):
