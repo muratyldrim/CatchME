@@ -4,7 +4,6 @@ from module import *
 
 # Main Function
 def main():
-    # Script variables
     processdays = "now-30d/d"
     hostname = sys.argv[1]
     df_hostname = pd.DataFrame()
