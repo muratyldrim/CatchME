@@ -184,9 +184,9 @@ def predict_feature(df_name, host, feature, logger):
                 '''Call function for insert mysql'''
                 DatabaseOps.insert_mysql(host, feature, i, logger)
 
-                logger.warning(f'{feature} anomaly detected for {host}')
+                logger.warning(f'anomaly detected for {feature} for {host} - score:{i}')
             else:
-                logger.warning(f'no {feature} anomaly detect for {host}')
+                logger.warning(f'no anomaly detect for {feature} for {host} - score:{i}')
     else:
         logger.warning(f'predict {feature} data for {host} FAILED!')
 
@@ -436,7 +436,6 @@ def plotly_visulation(cls_name, host, df_name, logger):
 
 # Classes
 class Finder:
-
     @staticmethod
     def find_model(host, feature, logger):
         models_path = r"C:\Users\murat.yildirim2\PycharmProjects\CatchME\models"
@@ -459,7 +458,6 @@ class Finder:
 
 
 class DatabaseOps:
-
     @staticmethod
     def delete_mysql(logger):
         interval_days = 120
@@ -507,7 +505,7 @@ class DatabaseOps:
         cursor_esy.execute(sql, values)
         mysql_esy.commit()
 
-        logger.warning(f'inserting to mysql_esy for {host}')
+        logger.warning(f'inserting score and anomaly value to mysql_esy')
 
         ''''gaziemir db operations'''
         mysql_gzm = pymysql.connect(host='172.31.44.50',
@@ -520,7 +518,7 @@ class DatabaseOps:
         cursor_gzm.execute(sql, values)
         mysql_gzm.commit()
 
-        logger.warning(f'anomaly detected! inserting score and anomaly values to mysql_gzm for {host}')
+        logger.warning('inserting score and anomaly value to mysql_gzm')
 
     @staticmethod
     def insert_es(df_name, host, date, conn, logger):
