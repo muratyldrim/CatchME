@@ -36,7 +36,7 @@ def main():
     for thread in thread_list:
         thread.join()
 
-    if threading.activeCount() == 1:
+    if threading.active_count() == 1:
         allhosts_logger.warning("The createModels script finished for ALL hosts.")
 
 

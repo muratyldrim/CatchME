@@ -13,8 +13,8 @@ def main():
     '''Call function for connect to elasticsearch'''
     es = connect_elasticsearch(allhosts_logger)
 
-    hostname_list = create_hostlist(es, index, todayDate, allhosts_logger)
-    #hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05", "wraap3", "medzd1"]
+    #hostname_list = create_hostlist(es, index, todayDate, allhosts_logger)
+    hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05", "wraap3", "medzd1"]
 
     allhosts_logger.warning(f'The predictModels script is started for {len(hostname_list)} hosts for {processdays}.')
 
@@ -33,7 +33,7 @@ def main():
     for thread in thread_list:
         thread.join()
 
-    if threading.activeCount() == 1:
+    if threading.active_count() == 1:
         allhosts_logger.warning("The predictModels script finished for ALL hosts.")
 
 
