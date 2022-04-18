@@ -86,8 +86,8 @@ def create_logger(logger_name, logfile_name):
 
 
 def connect_elasticsearch(logger):
-    conn = "False"
-    while conn == "False":
+    conn_check = "False"
+    while conn_check == "False":
         es = Elasticsearch([{'host': '10.86.36.130', 'port': '9200'}])
         if es.ping():
             logger.warning("connected to ElasticSearch.")
