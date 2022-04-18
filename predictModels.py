@@ -13,13 +13,12 @@ def main():
     '''Call function for connect to elasticsearch'''
     es = connect_elasticsearch(allhosts_logger)
 
-    #hostname_list = create_hostlist(es, index, todayDate, allhosts_logger)
-    hostname_list = ["unxmysqldb01", "ynmdcachep8", "vnnxtdp02", "meddbp2", "esdp02", "cms1tasap05", "wraap3", "medzd1"]
+    hostname_list = create_hostlist(es, index, todayDate, allhosts_logger)
 
     allhosts_logger.warning(f'The predictModels script is started for {len(hostname_list)} hosts for {processdays}.')
 
     q = Queue(maxsize=0)  # 0 means infinite
-    num_threads = 3
+    num_threads = 10
     thread_list = []
 
     for j in hostname_list:
@@ -27,8 +26,8 @@ def main():
 
     for i in range(num_threads):
         thread = threading.Thread(target=predict_models, args=(es, q, i, processdays, hostname_list,), daemon=True)
-        thread.start()
         thread_list.append(thread)
+        thread.start()
 
     for thread in thread_list:
         thread.join()
