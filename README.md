@@ -1,4 +1,3 @@
-![image](https://user-images.githubusercontent.com/51790526/164987351-5d9f0feb-7682-412e-bcc7-035958cb9d7a.png)
 
 
 # CatchME
@@ -12,6 +11,9 @@ Project is created with:
 * Metricbeat v6.8.9
 * MySQL v5.6.35
 * Grafana v8.2.1
+
+![image](https://user-images.githubusercontent.com/51790526/164987351-5d9f0feb-7682-412e-bcc7-035958cb9d7a.png)
+
 
 ## Introduction
 It uses Metricbeat data which is a lightweight agent that can be installed on target servers to periodically collect performance metrics data from them and send output to Elasticsearch directly.
