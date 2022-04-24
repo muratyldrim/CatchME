@@ -20,7 +20,7 @@ It uses Metricbeat data which is a lightweight agent that can be installed on ta
 
 It provides a proactive solution by predicting the anomaly in **real-time**. There is also an option of making a **historical** anomaly detection approach.
 
-## Used ML&Scaler Algortihms
+## Used ML&Scaler Algorithms
 
 * StandartScaler()
 
@@ -42,7 +42,12 @@ Following 28 features were used for the model creation and prediction.
 ![image](https://user-images.githubusercontent.com/51790526/164985113-faef2a0a-ac55-4372-8d75-0ff2992bdfca.png)
 
 ## How It Works
-- Models and scalers are created for 2000+ servers twice a week with using a 
+# Real-time
+- Models and scalers are created for 2000+ servers twice a week with using createModels.py (Crontab)
+- It predicts data every 5 minutes using its own models&scalers for 2000+ servers and sends output to ES and MySQL.
+
+# Historical
+- Using createANDpredict.py 
 
 ![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
 
