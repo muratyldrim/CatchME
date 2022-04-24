@@ -47,8 +47,9 @@ Following 28 features were used for the model creation and prediction.
 - It predicts data every 5 minutes for 2000+ servers with using predictModels.py and sends output to ES and MySQL.
 
 ### Historical
-- Generates an anomaly graph for last 30 days for a specified server with using createANDpredict.py.
+- Creates an anomaly graph for the last 30 days for a specified server using createANDpredict.py.
 
+#### Architecture
 ![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
 
 ## Links
