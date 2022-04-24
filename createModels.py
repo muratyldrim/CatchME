@@ -5,7 +5,7 @@ from queue import Queue
 
 # Main Function
 def main():
-    processdays = "now-120d/d"
+    processdays = "now-30d/d"
 
     '''Call function for allhosts logger config'''
     allhosts_logger = create_logger("ALLHosts", "createModels")
