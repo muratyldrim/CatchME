@@ -15,7 +15,7 @@ It uses Metricbeat data which is a lightweight agent that can be installed on ta
 
 It provides a proactive solution by predicting the anomaly in **real-time**. There is also an option of making a **historical** anomaly detection approach.
 
-## Using ML Tools
+## Using ML Algortihms
 
 * StandartScaler()
 
@@ -37,11 +37,15 @@ https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationFore
 Predict 
 
 
-## Features
+## ML Features
 
 Following 28 features were used for the model creation and prediction.
 
 ![image](https://user-images.githubusercontent.com/51790526/164985113-faef2a0a-ac55-4372-8d75-0ff2992bdfca.png)
+
+
+First Header | Second Header———— | ————-Content from cell 1 | Content from cell 2Content in the first column | Content in the second column
+
 
 
 ## Links
