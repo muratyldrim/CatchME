@@ -42,11 +42,11 @@ Following 28 features were used for the model creation and prediction.
 ![image](https://user-images.githubusercontent.com/51790526/164985113-faef2a0a-ac55-4372-8d75-0ff2992bdfca.png)
 
 ## How It Works
-# Real-time
+### Real-time
 - Models and scalers are created for 2000+ servers twice a week with using createModels.py (Crontab)
 - It predicts data every 5 minutes using its own models&scalers for 2000+ servers and sends output to ES and MySQL.
 
-# Historical
+### Historical
 - Using createANDpredict.py 
 
 ![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
