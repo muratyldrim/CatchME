@@ -39,7 +39,8 @@ https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationFore
 
 Predict 
 
-![image](https://user-images.githubusercontent.com/51790526/164994342-0ba9d588-de3d-4c4d-a75d-0ce6f8271c3d.png)
+![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
+
 
 
 ## ML Features
