@@ -23,8 +23,6 @@ https://en.wikipedia.org/wiki/Feature_scaling
 
 https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
 
-
-
 * IsolatinForest()
 
 https://ieeexplore.ieee.org/document/4781136
@@ -32,7 +30,7 @@ https://ieeexplore.ieee.org/document/4781136
 https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html
 
 
-## How it works
+## How It Works
 
 Predict 
 
@@ -42,9 +40,6 @@ Predict
 Following 28 features were used for the model creation and prediction.
 
 ![image](https://user-images.githubusercontent.com/51790526/164985113-faef2a0a-ac55-4372-8d75-0ff2992bdfca.png)
-
-
-First Header | Second Header———— | ————-Content from cell 1 | Content from cell 2Content in the first column | Content in the second column
 
 
 
