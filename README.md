@@ -1,3 +1,6 @@
+![image](https://user-images.githubusercontent.com/51790526/164987351-5d9f0feb-7682-412e-bcc7-035958cb9d7a.png)
+
+
 # CatchME
 CatchME is an anomaly detection tool based on system performance metrics. 
 
