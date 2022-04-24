@@ -3,7 +3,7 @@
 # CatchME
 CatchME is an open source anomaly detection tool based on system performance metrics. 
 
-## Technologies
+## Built With
 Project is created with:
 
 * Python v3.9.7
@@ -35,21 +35,15 @@ https://ieeexplore.ieee.org/document/4781136
 https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html
 
 
-## How It Works
-
-Predict 
-
-![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
-
-
-
 ## ML Features
 
 Following 28 features were used for the model creation and prediction.
 
 ![image](https://user-images.githubusercontent.com/51790526/164985113-faef2a0a-ac55-4372-8d75-0ff2992bdfca.png)
 
+## How It Works
 
+![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
 
 ## Links
 Installation and Configuration Metricbeat
