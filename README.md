@@ -1,7 +1,7 @@
 
 
 # CatchME
-CatchME is an anomaly detection tool based on system performance metrics. 
+CatchME is an open source anomaly detection tool based on system performance metrics. 
 
 ## Technologies
 Project is created with:
