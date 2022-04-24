@@ -15,9 +15,6 @@ It uses Metricbeat data which is a lightweight agent that can be installed on ta
 
 It provides a proactive solution by predicting the anomaly in **real-time**. There is also an option of making a **historical** anomaly detection approach.
 
-
-
-
 ## Using ML Tools
 
 * StandartScaler()
@@ -46,3 +43,16 @@ Following 28 features were used for the model creation and prediction.
 
 ![image](https://user-images.githubusercontent.com/51790526/164985113-faef2a0a-ac55-4372-8d75-0ff2992bdfca.png)
 
+
+## Links
+Installation and Configuration Metricbeat
+https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-installation-configuration.html
+
+Installation Elasticsearch
+https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html
+
+Installation Grafana
+https://grafana.com/docs/grafana/latest/installation/
+
+Installation MySQL
+https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/installing.html
