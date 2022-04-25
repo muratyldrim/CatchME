@@ -88,7 +88,7 @@ nohup /catchme/catchmeRun.sh &
 ![create predict](https://user-images.githubusercontent.com/51790526/165002616-7ca20671-ccf8-4e7c-abd4-7d2cfeaaddbd.PNG)
 
 ### Admin Dashboard
-![admin-page](https://user-images.githubusercontent.com/51790526/165080870-20a33d10-134d-4155-b401-b8a3b4a6857a.PNG)
+![admin-page](https://user-images.githubusercontent.com/51790526/165086236-fc364685-e716-456f-8aac-f6d34075d599.PNG)
 
 ## Links
 Installation and Configuration Metricbeat
