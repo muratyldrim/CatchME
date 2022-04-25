@@ -57,10 +57,9 @@ Following 28 features were used for the model creation and prediction.
 ![how it works](https://user-images.githubusercontent.com/51790526/165002550-b80e043f-369c-49cc-9527-6e0f2d42ff6d.PNG)
 
 
-
 ## Usage
 * createModels.py runnig in crontab for twice a week.
-{00 00 * * sun,wed /catchme/createModels.py}
+"00 00 * * sun,wed /catchme/createModels.py"
 * predictModels.py running in a loop in the backgroud.
 nohup /catchme/catchmeRun.sh &
 * createANDpredict.py running for a specific server.
