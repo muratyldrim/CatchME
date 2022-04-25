@@ -49,8 +49,15 @@ Following 28 features were used for the model creation and prediction.
 ### Historical
 - Creates an anomaly graph for the last 30 days for a specified server using createANDpredict.py.
 
+
 #### Architecture
 ![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
+
+
+## Usage
+
+## Screenshots
+
 
 ## Links
 Installation and Configuration Metricbeat
