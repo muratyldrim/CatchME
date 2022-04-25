@@ -27,7 +27,7 @@ It provides a proactive solution by predicting the anomaly in **real-time**. The
 https://en.wikipedia.org/wiki/Feature_scaling
 
 https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
-
+<br/>
 * IsolatinForest()
 
 https://ieeexplore.ieee.org/document/4781136
@@ -48,8 +48,7 @@ Following 28 features were used for the model creation and prediction.
 
 ### Historical
 - Creates an anomaly graph for the last 30 days for a specified server using createANDpredict.py.
-
-
+<br/>
 #### Architecture
 ![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
 
