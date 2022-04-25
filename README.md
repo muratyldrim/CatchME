@@ -27,9 +27,7 @@ It provides a proactive solution by predicting the anomaly in **real-time**. The
 https://en.wikipedia.org/wiki/Feature_scaling
 
 https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
-
 <br/>
-
 * IsolatinForest()
 
 https://ieeexplore.ieee.org/document/4781136
