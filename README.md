@@ -87,6 +87,9 @@ nohup /catchme/catchmeRun.sh &
 ### Historical
 ![create predict](https://user-images.githubusercontent.com/51790526/165002616-7ca20671-ccf8-4e7c-abd4-7d2cfeaaddbd.PNG)
 
+### Admin Dashboard
+![admin-page](https://user-images.githubusercontent.com/51790526/165078206-8fa47a96-21a8-4783-99c8-0ac84e6cf660.PNG)
+
 ## Links
 Installation and Configuration Metricbeat
 https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-installation-configuration.html
