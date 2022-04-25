@@ -71,7 +71,7 @@ Following 28 features were used for the model creation and prediction.
 nohup /catchme/catchmeRun.sh &
 ```
 
-* createANDpredict.py runs for a specific server.
+* createANDpredict.py runs for predict last 30 days data. There are three view options which are 7, 15, 30 days.  A hostname must given while runnig script.
 
 ```
 /catchme/createANDpredict.py <server_name>
