@@ -78,7 +78,7 @@ nohup /catchme/catchmeRun.sh &
 
 ## Screenshots
 
-* Screenshots for different servers
+* Screenshots for different servers below.
 
 ### Real-time & Historical 
 * Anomaly points, show when anomaly occurred.
