@@ -59,8 +59,9 @@ Following 28 features were used for the model creation and prediction.
 
 
 ## Usage
-* createModels.py runnig in crontab
-- 00 00 * * sun,wed /createModels.py
+* createModels.py runnig in crontab for twice a week  00 00 * * sun,wed /catchme/createModels.py
+* predictModels.py running in a loop in the backgroud  nohup /catchme/catchmeRun.sh &
+* createANDpredict.py running for a specific server /catchme/createANDpredict.py <server_name>
 
 ## Screenshots
 ### Real-time
