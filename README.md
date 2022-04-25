@@ -53,7 +53,7 @@ Following 28 features were used for the model creation and prediction.
 
 <br/>
 
-#### Architecture
+#### Architecture of Catchme
 ![how it works](https://user-images.githubusercontent.com/51790526/165000175-1f556d2a-066e-4a76-9e9d-ceb0107bf93b.PNG)
 
 
