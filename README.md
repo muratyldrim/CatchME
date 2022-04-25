@@ -77,6 +77,9 @@ nohup /catchme/catchmeRun.sh &
 ```
 
 ## Screenshots
+
+* Screenshots for different servers
+
 ### Real-time & Historical 
 * Anomaly points, show when anomaly occurred.
 * Anomaly score, gives a more informative result showing the degree of abnormality. It determines the severity of the anomaly.
