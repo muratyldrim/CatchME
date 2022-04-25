@@ -18,9 +18,9 @@ Project is created with:
 ## Introduction
 It uses Metricbeat data which is a lightweight agent that can be installed on target servers to periodically collect performance metrics data from them and send output to Elasticsearch directly.
 
-It provides a proactive solution by predicting the anomaly in **real-time**. It allows for a **historical** anomaly detection approach.
+It provides a proactive solution by predicting the anomaly in **real-time**. It also allows for a **historical** anomaly detection approach.
 
-There is also an option to trigger manually for a specific server.
+There is another option to trigger manually for a specific server.
 
 ## Used ML & Scaler Algorithms
 
