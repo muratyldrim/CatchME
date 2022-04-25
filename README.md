@@ -71,7 +71,7 @@ Following 28 features were used for the model creation and prediction.
 nohup /catchme/catchmeRun.sh &
 ```
 
-* createANDpredict.py runs for predict last 30 days data. There are three view options which are 7, 15, 30 days.  A server name must given while runnig script.
+* createANDpredict.py runs for predict last 30 days data. There are three view options which are 7, 15 and 30 days. A server name must given while runnig script.
 
 ```
 /catchme/createANDpredict.py <server_name>
@@ -79,8 +79,9 @@ nohup /catchme/catchmeRun.sh &
 
 ## Screenshots
 ### Real-time
-![dxlmngdp3_2](https://user-images.githubusercontent.com/51790526/165002747-9881f301-5c27-4a24-b12d-e9c15e872da5.PNG)
+* 
 ![sblapp01](https://user-images.githubusercontent.com/51790526/165002752-83971e56-b0e1-4752-bf99-5328a56f6d7d.PNG)
+![dxlmngdp3_2](https://user-images.githubusercontent.com/51790526/165002747-9881f301-5c27-4a24-b12d-e9c15e872da5.PNG)
 ![dxlmngdp3](https://user-images.githubusercontent.com/51790526/165002757-8f0a56a8-1cba-454f-8069-576b65825390.PNG)
 ![vnnxtdp02](https://user-images.githubusercontent.com/51790526/165002759-124dec2d-5185-4c5c-b014-6f03384e9140.PNG)
 
