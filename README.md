@@ -94,9 +94,17 @@ nohup /catchme/catchmeRun.sh &
 ![vnnxtdp02](https://user-images.githubusercontent.com/51790526/165002759-124dec2d-5185-4c5c-b014-6f03384e9140.PNG)
 
 ### Manual Triggered
+* Predicts for the last 30 days for a given server.
+
+<br/>
+
 ![create predict](https://user-images.githubusercontent.com/51790526/165002616-7ca20671-ccf8-4e7c-abd4-7d2cfeaaddbd.PNG)
 
 ### Admin Dashboard
+* OS administrators dashboard to keep track of all anomaly records.
+
+<br/>
+
 ![admin-page](https://user-images.githubusercontent.com/51790526/165086236-fc364685-e716-456f-8aac-f6d34075d599.PNG)
 
 ## Links
