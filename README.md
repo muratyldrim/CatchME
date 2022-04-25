@@ -20,7 +20,7 @@ It uses Metricbeat data which is a lightweight agent that can be installed on ta
 
 It provides a proactive solution by predicting the anomaly in **real-time**. It also allows for a **historical** anomaly detection approach.
 
-There is an option to trigger manually for a specific server.
+There is also an option to trigger manually for a specific server.
 
 ## Used ML & Scaler Algorithms
 
