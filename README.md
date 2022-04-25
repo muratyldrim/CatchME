@@ -59,6 +59,8 @@ Following 28 features were used for the model creation and prediction.
 
 
 ## Usage
+* createModels.py runnig in crontab
+- 00 00 * * sun,wed /createModels.py
 
 ## Screenshots
 ### Real-time
