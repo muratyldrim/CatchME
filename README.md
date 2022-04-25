@@ -41,7 +41,8 @@ https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationFore
 
 Following 28 features were used for the model creation and prediction.
 
-![image](https://user-images.githubusercontent.com/51790526/164985113-faef2a0a-ac55-4372-8d75-0ff2992bdfca.png)
+![ML Features](https://user-images.githubusercontent.com/51790526/165007275-f8d68c12-aff2-4680-aae3-9544859515be.PNG)
+
 
 ## How It Works
 ### Real-time
