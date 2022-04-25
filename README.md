@@ -79,7 +79,8 @@ nohup /catchme/catchmeRun.sh &
 
 ## Screenshots
 ### Real-time
-* 
+* Anomaly points, show when anomaly occurred.
+* Anomaly score, gives a more informative result showing the degree of abnormality. It determines the severity of the anomaly.
 ![sblapp01](https://user-images.githubusercontent.com/51790526/165002752-83971e56-b0e1-4752-bf99-5328a56f6d7d.PNG)
 ![dxlmngdp3_2](https://user-images.githubusercontent.com/51790526/165002747-9881f301-5c27-4a24-b12d-e9c15e872da5.PNG)
 ![dxlmngdp3](https://user-images.githubusercontent.com/51790526/165002757-8f0a56a8-1cba-454f-8069-576b65825390.PNG)
