@@ -1,7 +1,7 @@
 
 
 # CatchME
-CatchME is an open source anomaly detection tool based on system performance metrics. 
+CatchME is an open source ML anomaly detection tool based on system performance metrics. 
 
 ## Built With
 Project is created with:
@@ -58,19 +58,19 @@ Following 28 features were used for the model creation and prediction.
 
 
 ## Usage
-* createModels.py runnig in crontab for twice a week.
+* createModels.py runs twice a week in crontab.
 
 ```
 00 00 * * sun,wed /catchme/createModels.py
 ```
 
-* predictModels.py running in a loop in the backgroud.
+* predictModels.py runs in a loop in the backgroud.
 
 ```
 nohup /catchme/catchmeRun.sh &
 ```
 
-* createANDpredict.py running for a specific server.
+* createANDpredict.py runs for a specific server.
 
 ```
 /catchme/createANDpredict.py <server_name>
