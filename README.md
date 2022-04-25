@@ -66,12 +66,15 @@ Following 28 features were used for the model creation and prediction.
 
 * predictModels.py running in a loop in the backgroud.
 
-
+```
 nohup /catchme/catchmeRun.sh &
-
+```
 
 * createANDpredict.py running for a specific server.
+
+```
 /catchme/createANDpredict.py <server_name>
+```
 
 ## Screenshots
 ### Real-time
