@@ -20,7 +20,7 @@ It uses Metricbeat data which is a lightweight agent that can be installed on ta
 
 It provides a proactive solution by predicting the anomaly in **real-time**. There is also an option of making a **historical** anomaly detection approach.
 
-## Used ML&Scaler Algorithms
+## Used ML & Scaler Algorithms
 
 * StandartScaler()
 
