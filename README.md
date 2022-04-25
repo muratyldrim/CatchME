@@ -45,11 +45,12 @@ Following 28 features were used for the model creation and prediction.
 
 
 ## How It Works
-### Real-time
+### Real-time & Historical 
+- It monitors in real time and also keeps up to 120 days of data.
 - Models and scalers are created for 2000+ servers twice a week with using **createModels.py**.
 - It predicts data every 5 minutes for 2000+ servers with using **predictModels.py** and sends output to ES and MySQL.
 
-### Historical
+### Manual Triggered
 - Creates an anomaly graph for the last 30 days for a specified server using **createANDpredict.py**.
 
 <br/>
@@ -78,15 +79,18 @@ nohup /catchme/catchmeRun.sh &
 ```
 
 ## Screenshots
-### Real-time
+### Real-time & Historical 
 * Anomaly points, show when anomaly occurred.
 * Anomaly score, gives a more informative result showing the degree of abnormality. It determines the severity of the anomaly.
+
+<br/>
+
 ![sblapp01](https://user-images.githubusercontent.com/51790526/165002752-83971e56-b0e1-4752-bf99-5328a56f6d7d.PNG)
 ![dxlmngdp3_2](https://user-images.githubusercontent.com/51790526/165002747-9881f301-5c27-4a24-b12d-e9c15e872da5.PNG)
 ![dxlmngdp3](https://user-images.githubusercontent.com/51790526/165002757-8f0a56a8-1cba-454f-8069-576b65825390.PNG)
 ![vnnxtdp02](https://user-images.githubusercontent.com/51790526/165002759-124dec2d-5185-4c5c-b014-6f03384e9140.PNG)
 
-### Historical
+### Manual Triggered
 ![create predict](https://user-images.githubusercontent.com/51790526/165002616-7ca20671-ccf8-4e7c-abd4-7d2cfeaaddbd.PNG)
 
 ### Admin Dashboard
