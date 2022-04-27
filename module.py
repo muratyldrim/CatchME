@@ -556,3 +556,4 @@ class CreateVisual:
     def anomaly_count(self):
         return str(self.df_hostname_result[f'{self.name}_label']
                    [self.df_hostname_result[f'{self.name}_label'] == -1].count())
+
